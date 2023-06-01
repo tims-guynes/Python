@@ -1,0 +1,8 @@
+#files to ignore
+*.log 
+*.pdf
+
+
+# folders to ignore
+archive/
+google_sheets/

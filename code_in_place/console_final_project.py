@@ -1,7 +1,8 @@
 import random
 import time
+import os
 
-FILE_NAME = 'dialog.txt'
+FILE_NAME = os.path.join(os.path.dirname(__file__),'dialog.txt')
 
 player = {
     "power":0,
@@ -71,9 +72,9 @@ def main():
     dialog_selection(0, 3)
     weapon = choose_weapon()
 
-    print(player["power"])
-    print(player["speed"])
-    dialog_selection(3, 5)
+    #print(player["power"])
+    #print(player["speed"])
+    dialog_selection(3, 8)
     fate_select()
 
 def dialog_selection(start, end):
@@ -113,6 +114,7 @@ def fate_select_enemy():
     print(p_select)
 
 def fate_select():
+    choice = input(": ")
     #gives the player a choice
     pass
 

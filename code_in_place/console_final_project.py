@@ -15,6 +15,7 @@ TEXT_SPEED = 0.1
 
 error_msg = "You did not choose the right selection! "
 
+#dictionary's
 player = {
     "stats": {
         "power":0,
@@ -99,6 +100,26 @@ armor = {
     },
 }
 
+accessories = {
+    "gold ring": {
+        "speed": 1,
+        "score": 3
+    },
+    "gold necklace": {
+        "defense": 1,
+        "score": 3
+    },
+    "sliver ring": {
+        "speed": 2,
+        "score": 1
+    },
+    "sliver necklace": {
+        "defense": 2,
+        "score": 1
+    },
+}
+
+#main function
 def main():
     
     dialog_selection(0, 4, MAIN_DIALOG)
@@ -106,7 +127,7 @@ def main():
     choose_weapon()
     dialog_selection(4, 10, MAIN_DIALOG)
     #print(player["stats"])
-    fate_select()
+    fate_select(0)
     #print(player["stats"])
 
 def dialog_selection(start, end, file_sel):
@@ -198,8 +219,8 @@ def fate_select_enemy(enemy):
     #print(p_select)
 
 #options to select
-def fate_select():
-    num_selection = 0
+def fate_select(path):
+    num_selection = path
     #path_selection = ''
     choice = input(": ").lower()
     armor_selection = ""
@@ -207,15 +228,14 @@ def fate_select():
     match choice:
         case "left":
             match num_selection:
-                case 0: 
+                case 0: #the beginning
                     dialog_selection(11, 20, MAIN_DIALOG)
-                    fate_select_enemy("goblin")
-                    num_selection = 1
-                case 1:
+                    path_choice = fate_select_enemy("goblin")
+                case 1: #blood on your hands
                     pass
-                case 2:
+                case 2: #sparing the enemy
                     pass
-                case 3:
+                case 3: #supply chain
                     pass
         case "right":
             match num_selection:
@@ -281,15 +301,22 @@ def combat_cycle(enemy):
                     temp_def = 0
 
                 print("You have done {} damage to the {} you are fighting.".format(player_pwr, enemy))
-                enemy_health -= player_pwr #player hits first every time
-                print(temp_enemy)
-                if temp_enemy['health'] > 0: #if the enemy is still alive, enemy attacks
+                if enemy_health > 0:
+                    enemy_health -= player_pwr
+                    print(enemy_health)
+                    temp_result = input(combat_msg).lower()
+                else:
+                    break
+                
+                """while enemy_health > 0:
+                    enemy_health -= player_pwr #player hits first every time
+                    print(temp_enemy)
                     print("The {} you are fighting has survived and attacked you for {} damage.".format(enemy, temp_enemy['power']))
                     player_health -= enemy_pwr - temp_def - player_defense # subtract the health based on enemies power, your defense and temp defense
                     #print(enemy_pwr - temp_def - player_defense )
                     print("You have {} health left.".format(player_health))
-                    temp_result = input(combat_msg).lower()
-
+                    temp_result = input(combat_msg).lower()"""
+                
                 
 
             print(temp_enemy)
@@ -314,6 +341,7 @@ def combat_cycle(enemy):
     #defend
     #run
     pass
+
 
 if __name__ == "__main__":
     main()

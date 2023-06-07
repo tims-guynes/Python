@@ -3,6 +3,7 @@ import time
 import os
 
 FILE_NAME = os.path.join(os.path.dirname(__file__),'dialog.txt')
+TEXT_SPEED = 0.1
 
 player = {
     "power":0,
@@ -69,12 +70,13 @@ path_chosen = [
 
 def main():
     
-    dialog_selection(0, 3)
+    dialog_selection(0, 4)
     weapon = choose_weapon()
+    
 
     #print(player["power"])
     #print(player["speed"])
-    dialog_selection(3, 8)
+    dialog_selection(4, 9)
     fate_select()
 
 def dialog_selection(start, end):
@@ -82,7 +84,7 @@ def dialog_selection(start, end):
     
     for i in dialog[start:end]:
         print(i)
-        time.sleep(1)
+        time.sleep(TEXT_SPEED)
     
 def clean_dialog_text():
     f = open(FILE_NAME) #open the file
@@ -107,23 +109,46 @@ def choose_weapon():
     
     return(selection)
 
-def fate_select_enemy():
+def fate_select_enemy(enemy):
     #give options to select when encounter an enemy
-    print("How would you like to proceed? Sneak? Talk? Attack?")
+    print("Sneak? Talk? Attack?")
     p_select = input(": ").lower()
-    print(p_select)
+
+    if p_select.lower() == 'sneak':
+        if player["speed"] > enemies[enemy]["speed"]:
+            print(player["speed"])
+            print(enemies[enemy]["speed"])
+            player["score"] += 1
+            print("you have succeeded in sneaking away")
+        #compare player speed with enemy speed
+        #if player speed is greater than enemy speed = you get away unscathed
+        #else enemy attacks and you take damage
+        else:
+            print("You lost")
+        
+    elif p_select.lower() == 'talk':
+        pass
+    elif p_select.lower() == 'attack':
+        pass
+
+    #print(p_select)
 
 def fate_select():
-    choice = input(": ")
+    choice = input("Left? Right?: ")
+
+    if choice.lower() == 'left':
+        dialog_selection(10, 20)
+        fate_select_enemy("goblin")
+        pass
+    elif choice.lower() == 'right':
+        pass
     #gives the player a choice
     pass
 
 def combat_cycle(enemy, player):
-    #player goes first
-    #damage is done based on power
-    #if health equals 0 player/enemy dies
-    #if player dies, game over
-    #if enemy dies, score increase 
+    #attack
+    #defend
+    #run
     pass
 
 if __name__ == "__main__":

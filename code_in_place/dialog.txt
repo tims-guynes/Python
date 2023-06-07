@@ -1,18 +1,25 @@
 Welcome Traveler
 You have are fortunate to have stumbled upon two weapons to help you fight on your quest
 Please choose one to take
+-----------------------------------------------
 Now that you have your weapon
 As you have regained your senses you notice two paths in front of you
 The door to the left looks forboding and univiting like it has been tainted by something
 The door to the west is well kept and in prestine condition.
 Which do you choose?
 ---left door
-As you venture into the tainted door, you notice as you touch the door to open it, the handle starts to crumble to dust 
-Afterward the door creeks open with a sound that sends shivvers down your spine and a chill so deep that it feels like your bones hurt
-Once you have cleared your head enough to search the surrounding area that now looks like a marshland, you notice a defineable path
-Travelling down this path for some time, you notice a goblin on the path you are travelling not too far
+As you venture into the tainted door, 
+You notice as you touch the door to open it, 
+The handle starts to crumble to dust 
+Afterward the door creeks open with a sound that sends shivvers down your spine 
+And a chill so deep that it feels like your bones hurt
+Once you have cleared your head enough to search the surrounding area 
+You noticed that you're in a marshland now and you notice a defineable path
+Travelling down this path for some time, 
+you notice a goblin on the path you are travelling not too far
 As you come closer the goblin has yet to notice you
 What do you do?
+-----------------------------------------------
 
 
 ---right door

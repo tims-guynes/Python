@@ -255,11 +255,37 @@ def combat_cycle(enemy):
     combat_msg = "Would you like to Attack? Defend? or Run? "
     results = input(combat_msg).lower()
     round = 0
+    temp_def = 0
     temp_enemy = enemies[enemy]
 
+    #import stats
+    player_pwr = player["stats"]['power']
+    player_health = player["stats"]['health']
+    enemy_pwr = temp_enemy['power']
+
+    
     match results:
         case 'attack':
-            temp_enemy['health'] -= player["stats"]['power'] 
+            temp_result = ""
+            while True:
+                if temp_result == 'run' or temp_enemy["health"] <= 0:
+                    break
+                if temp_result == 'defend':
+                    temp_def = 1
+                if temp_result == 'attack':
+                    temp_def = 0
+
+                print("You have done {} damage to the {} you are fighting.".format(player["stats"]['power'], enemy))
+                temp_enemy['health'] -= player_pwr
+                print(temp_enemy)
+                if temp_enemy['health'] > 0:
+                    print("The {} you are fighting has survived and attacked you for {} damage.".format(enemy, temp_enemy['power']))
+                    player_health -= enemy_pwr - temp_def - player["stats"]["defense"]
+                    print("You have {} health left.".format(player["stats"]["health"]))
+                    temp_result = input(combat_msg).lower()
+
+                
+
             print(temp_enemy)
             #player attacks enemy
             #subtract player power from enemy health
@@ -274,7 +300,7 @@ def combat_cycle(enemy):
         case 'defend':
             pass
         case 'run':
-            pass
+            print("You ran away")
         case TypeError:
             print("You have selected an invalid option, please try again!")
             combat_cycle(enemy)

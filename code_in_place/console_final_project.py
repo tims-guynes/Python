@@ -2,8 +2,16 @@ import random
 import time
 import os
 
-FILE_NAME = os.path.join(os.path.dirname(__file__),'dialog.txt')
+
+MAIN_DIALOG = os.path.join(os.path.dirname(__file__),'speech/dialog.txt')
+BANDIT_SPEACH = os.path.join(os.path.dirname(__file__), "speech/bandit_speech.txt")
+GOBLIN_SPEACH = os.path.join(os.path.dirname(__file__), "speech/goblin_speech.txt")
+ORC_SPEACH = os.path.join(os.path.dirname(__file__), "speech/orc_speech.txt")
+ELF_SPEACH = os.path.join(os.path.dirname(__file__), "speech/elf_speech.txt")
+DRAGON_SPEACH = os.path.join(os.path.dirname(__file__), "speech/dragon_speech.txt")
+
 TEXT_SPEED = 0.1
+
 
 error_msg = "You did not choose the right selection! "
 
@@ -93,21 +101,23 @@ armor = {
 
 def main():
     
-    dialog_selection(0, 4)
-    weapon = choose_weapon()
-    dialog_selection(4, 10)
-    #print(player)
+    dialog_selection(0, 4, MAIN_DIALOG)
+    #print(player["stats"])
+    choose_weapon()
+    dialog_selection(4, 10, MAIN_DIALOG)
+    #print(player["stats"])
     fate_select()
+    #print(player["stats"])
 
-def dialog_selection(start, end):
-    dialog = clean_dialog_text()
+def dialog_selection(start, end, file_sel):
+    dialog = clean_dialog_text(file_sel)
     
     for i in dialog[start:end]:
         print(i)
         time.sleep(TEXT_SPEED)
     
-def clean_dialog_text():
-    f = open(FILE_NAME) #open the file
+def clean_dialog_text(file_sel):
+    f = open(file_sel) #open the file
     lines = []
     #strip out spaces for use in the dialog call
     for line in f:
@@ -124,17 +134,17 @@ def choose_weapon():
     print(weapon_selection)
 
     #cycle through weapons to match and add item to equipment dictionary
-    selection = input(":")
+    selection = input(":").lower()
 
     match selection:
         case "knife":
             add_eqipment("knife", weapons)
         case "sword":
-            temp_choice = "sword"
+            add_eqipment("sword", weapons)
         case "axe":
-            temp_choice = "axe"
+            add_eqipment("axe", weapons)
         case "hammer":
-            temp_choice = "hammer"
+            add_eqipment("hammer", weapons)
         case TypeError:
             print(error_msg)
             choose_weapon()
@@ -151,7 +161,6 @@ def add_eqipment(choice, _dict):
     for key, val in dict.items(_dict):
         if key == temp_choice:
             player["equipment"][key] = val
-    
 
 def fate_select_enemy(enemy):
     #give options to select when encounter an enemy
@@ -160,78 +169,115 @@ def fate_select_enemy(enemy):
 
     match p_select:
         case "sneak":
-            pass
+            if player["stats"]["speed"] > enemies[enemy]["speed"]: #compare player speed with enemy speed
+            #if player speed is greater than enemy speed = you get away unscathed
+                player["stats"]["score"] += 1
+                print("you have succeeded in sneaking away")
+                
+        #else enemy attacks and you take damage
+            else:
+                print("You lost")
         case "talk":
-            pass
+            match enemy:
+                case "bandit":
+                    pass
+                case "goblin":
+                    pass
+                case "orc":
+                    pass
+                case "elf":
+                    pass
+                case "dragon":
+                    pass
         case "attack":
-            pass
+            combat_cycle(enemy)
         case TypeError:
             print(error_msg)
             fate_select_enemy(enemy)
-
-    if p_select.lower() == 'sneak':
-        if player["stats"]["speed"] > enemies[enemy]["speed"]: #compare player speed with enemy speed
-            #if player speed is greater than enemy speed = you get away unscathed
-            player["stats"]["score"] += 1
-            print("you have succeeded in sneaking away")
-                
-        #else enemy attacks and you take damage
-        else:
-            print("You lost")
-        
-    elif p_select.lower() == 'talk':
-        pass
-    elif p_select.lower() == 'attack':
-        pass
 
     #print(p_select)
 
 #options to select
 def fate_select():
     num_selection = 0
-    choice = input(": ")
+    #path_selection = ''
+    choice = input(": ").lower()
     armor_selection = ""
     
-    match num_selection:
-        case 0:
-            match choice.lower():
-                case "left": 
-                    dialog_selection(10, 20)
+    match choice:
+        case "left":
+            match num_selection:
+                case 0: 
+                    dialog_selection(11, 20, MAIN_DIALOG)
                     fate_select_enemy("goblin")
                     num_selection = 1
-                case "right":
-                    armor_selection = random.choice(list(armor.keys()))
+                case 1:
+                    pass
+                case 2:
+                    pass
+                case 3:
+                    pass
+        case "right":
+            match num_selection:
+                case 0:
+                    armor_selection = random.choice(list(armor.keys())) #randomly select a piece of armor
                     add_eqipment(armor_selection, armor)
                     add_stats(armor, armor_selection)
                     print("Congragulations, you found {}, which gives you the following stats {}".format(armor_selection.upper(), armor[armor_selection]))
-                case TypeError:
-                    print(error_msg)
-                    print("Left? or Right?")
-                    fate_select()
-          
-        case 1:
-            pass
-
-        case 2:
-            pass
+                    num_selection = 2
+                case 1:
+                    pass
+                case 2:
+                    pass
+                case 3:
+                    pass
+        case TypeError:
+            print(error_msg)
+            print("Left? or Right?")
+            fate_select()
 
     #gives the player a choice
 
 def add_stats(i_dict, equipped):
-
+    #add stats that match to player stats from equipment
+    #eg weapon: knife has speed: 4, power 1, this will add to the players speed and power
+    #eg armor: plate has defense: 15, speed -7, this will add to defense and subtract from speed
     #bring in equipment stats
     for key, val in i_dict.items():
         for x, y in val.items():
             if key == equipped:
-                player["stats"][x] += y
-    #add stats that match to player stats from equipment
-    #eg weapon
-    # knife has speed: 4, power 1, this will add to the players speed and power
-    #eg armor
-    # plate has defense: 15, speed -7, this will add to defense and subtract from speed
+                player["stats"][x] += y #add the stat to the corrisponding state the item has
+   
 
+def combat_cycle(enemy):
+    
+    print("You have decided to attack the {}".format(enemy))
+    combat_msg = "Would you like to Attack? Defend? or Run? "
+    results = input(combat_msg).lower()
+    round = 0
+    temp_enemy = enemies[enemy]
 
-def combat_cycle(enemy, player):
+    match results:
+        case 'attack':
+            temp_enemy['health'] -= player["stats"]['power'] 
+            print(temp_enemy)
+            #player attacks enemy
+            #subtract player power from enemy health
+            #check if enemy health is 0, if greater than 0
+            #enemy attacks player
+            #subtract enemy power from defense, 
+            # #if power < 0, result is 0 minus players health
+            # #else subtract enemy power from player health
+            #check to see if player health is 0, if greater than 0, start combat cycle again
+
+            pass
+        case 'defend':
+            pass
+        case 'run':
+            pass
+        case TypeError:
+            print("You have selected an invalid option, please try again!")
+            combat_cycle(enemy)
     #attack
     #defend
     #run

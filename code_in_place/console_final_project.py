@@ -5,11 +5,14 @@ import os
 FILE_NAME = os.path.join(os.path.dirname(__file__),'dialog.txt')
 TEXT_SPEED = 0.1
 
+error_msg = "You did not choose the right selection! "
+
 player = {
     "power":0,
     "health":10,
     "score":0,
-    "speed":5
+    "speed":5,
+    "defense": 0
 }
 
 enemies = {
@@ -40,7 +43,7 @@ enemies = {
     "dragon":{
         "power":30,
         "health":100,
-        "speed":25,
+        "speed":2,
         "point":20
     },
 }
@@ -72,11 +75,8 @@ def main():
     
     dialog_selection(0, 4)
     weapon = choose_weapon()
-    
 
-    #print(player["power"])
-    #print(player["speed"])
-    dialog_selection(4, 9)
+    dialog_selection(4, 10)
     fate_select()
 
 def dialog_selection(start, end):
@@ -103,6 +103,18 @@ def choose_weapon():
         weapon_selection += key.capitalize() + ": "
     print(weapon_selection)
     selection = input(":")
+    match selection:
+        case "knife":
+            pass
+        case "sword":
+            pass
+        case "axe":
+            pass
+        case "hammer":
+            pass
+        case TypeError:
+            print(error_msg)
+            selection = input(":")
     print("You've chosen {}, may it do you well on this quest".format(selection))
     player["power"] += weapons[selection]["power"]
     player["speed"] += weapons[selection]["speed"]    
@@ -114,14 +126,23 @@ def fate_select_enemy(enemy):
     print("Sneak? Talk? Attack?")
     p_select = input(": ").lower()
 
+    match p_select:
+        case "sneak":
+            pass
+        case "talk":
+            pass
+        case "attack":
+            pass
+        case TypeError:
+            print(error_msg)
+            fate_select_enemy(enemy)
+
     if p_select.lower() == 'sneak':
-        if player["speed"] > enemies[enemy]["speed"]:
-            print(player["speed"])
-            print(enemies[enemy]["speed"])
+        if player["speed"] > enemies[enemy]["speed"]: #compare player speed with enemy speed
+            #if player speed is greater than enemy speed = you get away unscathed
             player["score"] += 1
             print("you have succeeded in sneaking away")
-        #compare player speed with enemy speed
-        #if player speed is greater than enemy speed = you get away unscathed
+                
         #else enemy attacks and you take damage
         else:
             print("You lost")
@@ -133,17 +154,33 @@ def fate_select_enemy(enemy):
 
     #print(p_select)
 
+#options to select
 def fate_select():
-    choice = input("Left? Right?: ")
+    num_selection = 0
+    choice = input(": ")
+    
+    match num_selection:
+        case 0:
+            match choice.lower():
+                case "left": 
+                    dialog_selection(10, 20)
+                    fate_select_enemy("goblin")
+                    num_selection = 1
+                case "right":
+                    pass
+                case TypeError:
+                    print(error_msg )
+                    #print("Left or Right?")
+                    print("Left? or Right?")
+                    fate_select()
+          
+        case 1:
+            pass
 
-    if choice.lower() == 'left':
-        dialog_selection(10, 20)
-        fate_select_enemy("goblin")
-        pass
-    elif choice.lower() == 'right':
-        pass
+        case 2:
+            pass
+
     #gives the player a choice
-    pass
 
 def combat_cycle(enemy, player):
     #attack

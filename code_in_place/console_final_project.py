@@ -254,34 +254,40 @@ def combat_cycle(enemy):
     print("You have decided to attack the {}".format(enemy))
     combat_msg = "Would you like to Attack? Defend? or Run? "
     results = input(combat_msg).lower()
-    round = 0
-    temp_def = 0
-    temp_enemy = enemies[enemy]
+    
+    temp_def = 0 #placeholder for the 'defend' option
 
-    #import stats
-    player_pwr = player["stats"]['power']
-    player_health = player["stats"]['health']
+    #import player stats
+    temp_player = player
+    player_pwr = temp_player["stats"]['power']
+    player_health = temp_player["stats"]['health']
+    player_defense = temp_player["stats"]["defense"]
+
+    #import enemy stats
+    temp_enemy = enemies[enemy]
     enemy_pwr = temp_enemy['power']
+    enemy_health = temp_enemy['health']
 
     
     match results:
         case 'attack':
             temp_result = ""
             while True:
-                if temp_result == 'run' or temp_enemy["health"] <= 0:
+                if temp_result == 'run' or temp_enemy["health"] <= 0: #check if option 'run' or enemies health is 0
                     break
-                if temp_result == 'defend':
+                if temp_result == 'defend': #add extra defense when you set to defend.
                     temp_def = 1
                 if temp_result == 'attack':
                     temp_def = 0
 
-                print("You have done {} damage to the {} you are fighting.".format(player["stats"]['power'], enemy))
-                temp_enemy['health'] -= player_pwr
+                print("You have done {} damage to the {} you are fighting.".format(player_pwr, enemy))
+                enemy_health -= player_pwr #player hits first every time
                 print(temp_enemy)
-                if temp_enemy['health'] > 0:
+                if temp_enemy['health'] > 0: #if the enemy is still alive, enemy attacks
                     print("The {} you are fighting has survived and attacked you for {} damage.".format(enemy, temp_enemy['power']))
-                    player_health -= enemy_pwr - temp_def - player["stats"]["defense"]
-                    print("You have {} health left.".format(player["stats"]["health"]))
+                    player_health -= enemy_pwr - temp_def - player_defense # subtract the health based on enemies power, your defense and temp defense
+                    #print(enemy_pwr - temp_def - player_defense )
+                    print("You have {} health left.".format(player_health))
                     temp_result = input(combat_msg).lower()
 
                 

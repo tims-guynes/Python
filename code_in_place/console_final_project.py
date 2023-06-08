@@ -38,7 +38,7 @@ enemies = {
     },
     "goblin":{
         "power":2,
-        "health":5,
+        "health":6,
         "speed":7,
         "point":1
     },
@@ -98,6 +98,7 @@ armor = {
         "defense": 15,
         "speed": -7,
     },
+    
 }
 
 accessories = {
@@ -117,18 +118,40 @@ accessories = {
         "defense": 2,
         "score": 1
     },
+    "ruby ring": {
+        "power": 2,
+        "score": 1
+    },
+    "ruby necklace": {
+        "defense": 2,
+        "score": 3
+    },
+    "steel grieves": {
+        "defense": 10,
+        "score": 5
+    },
+    "magic grieves": {
+        "health": 30,
+        "score": 15
+    },
+    "magic earrings": {
+        "health": 10,
+        "score": 7
+    },
+    "magic necklace": {
+        "health": 20,
+        "score": 7
+    }
 }
 
 #main function
 def main():
     
     dialog_selection(0, 4, MAIN_DIALOG)
-    #print(player["stats"])
     choose_weapon()
-    dialog_selection(4, 10, MAIN_DIALOG)
-    #print(player["stats"])
-    fate_select(0)
-    #print(player["stats"])
+    #dialog_selection(4, 10, MAIN_DIALOG)
+    fate_select()
+    
 
 def dialog_selection(start, end, file_sel):
     dialog = clean_dialog_text(file_sel)
@@ -177,6 +200,7 @@ def choose_weapon():
     
     return(selection)
 
+#adds item to players equipment
 def add_eqipment(choice, _dict):
     temp_choice = choice
     for key, val in dict.items(_dict):
@@ -211,7 +235,8 @@ def fate_select_enemy(enemy):
                 case "dragon":
                     pass
         case "attack":
-            combat_cycle(enemy)
+            result = combat_cycle(enemy)
+            return result
         case TypeError:
             print(error_msg)
             fate_select_enemy(enemy)
@@ -219,49 +244,64 @@ def fate_select_enemy(enemy):
     #print(p_select)
 
 #options to select
-def fate_select(path):
-    num_selection = path
-    #path_selection = ''
-    choice = input(": ").lower()
+def fate_select():
+    num_selection = 0
     armor_selection = ""
-    
-    match choice:
-        case "left":
-            match num_selection:
-                case 0: #the beginning
-                    dialog_selection(11, 20, MAIN_DIALOG)
-                    path_choice = fate_select_enemy("goblin")
-                case 1: #blood on your hands
-                    pass
-                case 2: #sparing the enemy
-                    pass
-                case 3: #supply chain
-                    pass
-        case "right":
-            match num_selection:
-                case 0:
-                    armor_selection = random.choice(list(armor.keys())) #randomly select a piece of armor
-                    add_eqipment(armor_selection, armor)
-                    add_stats(armor, armor_selection)
-                    print("Congragulations, you found {}, which gives you the following stats {}".format(armor_selection.upper(), armor[armor_selection]))
-                    num_selection = 2
-                case 1:
-                    pass
-                case 2:
-                    pass
-                case 3:
-                    pass
-        case TypeError:
-            print(error_msg)
-            print("Left? or Right?")
-            fate_select()
+    decision_result = ""
+
+    game_over = False
+
+
+    dialog_selection(4, 10, MAIN_DIALOG)
+    choice = input(": ").lower()
+
+    while game_over == False:
+           
+        match choice:
+            case "left":
+                match num_selection:
+                    case 0: #the beginning
+                        dialog_selection(11, 20, MAIN_DIALOG)
+                        decision_result = fate_select_enemy("goblin")
+                    case 1: #blood on your hands
+                        print("blood on your hands")
+                        pass
+                    case 2: #sparing the enemy
+                        print("sparing the enemy")
+                        pass
+                    case 3: #supply chain
+                        print("supply chain")
+                        pass
+            case "right":
+                match num_selection:
+                    case 0:
+                        armor_selection = random.choice(list(armor.keys())) #randomly select a piece of armor
+                        add_eqipment(armor_selection, armor)
+                        add_stats(armor, armor_selection)
+                        print("Congragulations, you found {}, which gives you the following stats {}".format(armor_selection.upper(), armor[armor_selection]))
+                        num_selection = 2
+                    case 1:
+                        pass
+                    case 2:
+                        pass
+                    case 3:
+                        pass
+            case TypeError:
+                print(error_msg)
+                print("Left? or Right?")
+                fate_select()
+        
+        if decision_result == "combat":
+            if num_selection == 0:
+                num_selection = 1
+        if decision_result == 'death':
+            game_over = True
 
     #gives the player a choice
 
+#adds the stats of the item on the player
 def add_stats(i_dict, equipped):
     #add stats that match to player stats from equipment
-    #eg weapon: knife has speed: 4, power 1, this will add to the players speed and power
-    #eg armor: plate has defense: 15, speed -7, this will add to defense and subtract from speed
     #bring in equipment stats
     for key, val in i_dict.items():
         for x, y in val.items():
@@ -297,27 +337,35 @@ def combat_cycle(enemy):
                     break
                 if temp_result == 'defend': #add extra defense when you set to defend.
                     temp_def = 1
+                    player_health += 3
                 if temp_result == 'attack':
                     temp_def = 0
 
                 print("You have done {} damage to the {} you are fighting.".format(player_pwr, enemy))
-                if enemy_health > 0:
-                    enemy_health -= player_pwr
-                    print(enemy_health)
-                    temp_result = input(combat_msg).lower()
-                else:
+                enemy_health -= player_pwr
+                if player_health <= 0:
+                    print("You died, you loose!")
+                    return 'death'
                     break
-                
-                """while enemy_health > 0:
-                    enemy_health -= player_pwr #player hits first every time
-                    print(temp_enemy)
-                    print("The {} you are fighting has survived and attacked you for {} damage.".format(enemy, temp_enemy['power']))
-                    player_health -= enemy_pwr - temp_def - player_defense # subtract the health based on enemies power, your defense and temp defense
-                    #print(enemy_pwr - temp_def - player_defense )
-                    print("You have {} health left.".format(player_health))
-                    temp_result = input(combat_msg).lower()"""
-                
-                
+                if enemy_health <= 0:
+                    match enemy:
+                        case "goblin":
+                            print("After defeating the goblin, you find a sliver necklace on the corpse and add it to your equipment")
+                            add_eqipment("sliver ring", accessories)
+                            add_stats(accessories, "silver ring")
+                            return 'combat'
+                        case "bandit":
+                            return 'combat'
+                        case "orc":
+                            return 'combat'
+                        case "elf":
+                            return 'combat'
+                        case "dragon":
+                            pass
+                player_health -= enemy_pwr - temp_def - player_defense
+                print("Your enemy the {} has done {} damage to you.".format(enemy, (enemy_pwr - temp_def - player_defense)))
+                print("Your remaining health is: {}".format(player_health))
+                temp_result = input(combat_msg).lower()
 
             print(temp_enemy)
             #player attacks enemy

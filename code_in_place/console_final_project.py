@@ -4,6 +4,7 @@ import os
 
 
 MAIN_DIALOG = os.path.join(os.path.dirname(__file__),'speech/dialog.txt')
+COMBAT_DIALOG = os.path.join(os.path.dirname(__file__),'speech/combat.txt')
 BANDIT_SPEACH = os.path.join(os.path.dirname(__file__), "speech/bandit_speech.txt")
 GOBLIN_SPEACH = os.path.join(os.path.dirname(__file__), "speech/goblin_speech.txt")
 ORC_SPEACH = os.path.join(os.path.dirname(__file__), "speech/orc_speech.txt")
@@ -147,7 +148,7 @@ accessories = {
 #main function
 def main():
     
-    dialog_selection(0, 4, MAIN_DIALOG)
+    dialog_selection(0, 3, MAIN_DIALOG)
     choose_weapon()
     #dialog_selection(4, 10, MAIN_DIALOG)
     fate_select()
@@ -208,34 +209,51 @@ def add_eqipment(choice, _dict):
             player["equipment"][key] = val
 
 def fate_select_enemy(enemy):
-    #give options to select when encounter an enemy
-    print("Sneak? Talk? Attack?")
+    #player stats
+    player_score = player["stats"]["score"]
+    player_speed = player["stats"]["speed"]
+
+    enemy_speed = enemies[enemy]["speed"] 
+
+    print("Sneak? Talk? Combat?")
     p_select = input(": ").lower()
 
+    #give options to select when encounter an enemy
     match p_select:
-        case "sneak":
-            if player["stats"]["speed"] > enemies[enemy]["speed"]: #compare player speed with enemy speed
+        case "sneak": 
+            if player_speed > enemy_speed: #compare player speed with enemy speed
             #if player speed is greater than enemy speed = you get away unscathed
-                player["stats"]["score"] += 1
+                player_score += 3
                 print("you have succeeded in sneaking away")
+                return "sneak"
                 
         #else enemy attacks and you take damage
             else:
-                print("You lost")
-        case "talk":
+                print("You were noticed by the enemy, would you like to talk or fight?")
+                print("Talk? Combat?")
+                p_select = input(": ").lower()
+
+        case "talk": 
             match enemy:
                 case "bandit":
-                    pass
+                    player_score += 5
+                    return "talk"                    
                 case "goblin":
-                    pass
+                    player_score += 5
+                    return "talk"
                 case "orc":
-                    pass
+                    player_score += 5
+                    return "talk"
                 case "elf":
-                    pass
+                    player_score += 5
+                    return "talk"
                 case "dragon":
-                    pass
-        case "attack":
-            result = combat_cycle(enemy)
+                    player_score += 5
+                    return "talk"
+                
+        case "combat":
+            result = combat_cycle(enemy) 
+            player_score += 1
             return result
         case TypeError:
             print(error_msg)
@@ -248,6 +266,9 @@ def fate_select():
     num_selection = 0
     armor_selection = ""
     decision_result = ""
+    combat_decision = 0
+    sneak_decision = 0
+    talk_decision = 0
 
     game_over = False
 
@@ -261,12 +282,20 @@ def fate_select():
             case "left":
                 match num_selection:
                     case 0: #the beginning
-                        dialog_selection(11, 20, MAIN_DIALOG)
+                        dialog_selection(11, 22, MAIN_DIALOG)
                         decision_result = fate_select_enemy("goblin")
+                        
                     case 1: #blood on your hands
-                        print("blood on your hands")
-                        pass
+                        #finds a random accessory
+                        #case goes to 2
+                        dialog_selection(11, 22, MAIN_DIALOG)
+                        break
+                        
                     case 2: #sparing the enemy
+                        #elf encounter
+                        #attack goes to
+                        #sneak goes to
+                        #talk goes to
                         print("sparing the enemy")
                         pass
                     case 3: #supply chain
@@ -281,10 +310,16 @@ def fate_select():
                         print("Congragulations, you found {}, which gives you the following stats {}".format(armor_selection.upper(), armor[armor_selection]))
                         num_selection = 2
                     case 1:
-                        pass
+                        #orc encounter
+                        #attack goes to 4
+                        #sneak goes to
+                        #talk goes to
+                        dialog_selection(11, 22, MAIN_DIALOG)
                     case 2:
+                        dialog_selection(11, 22, MAIN_DIALOG)
                         pass
                     case 3:
+                        dialog_selection(11, 22, MAIN_DIALOG)
                         pass
             case TypeError:
                 print(error_msg)
@@ -292,9 +327,16 @@ def fate_select():
                 fate_select()
         
         if decision_result == "combat":
+            combat_decision += 1
             if num_selection == 0:
                 num_selection = 1
-        if decision_result == 'death':
+                
+                choice = input(": ").lower()
+        elif decision_result == "sneak":
+            sneak_decision += 1
+        elif decision_result == "talk":
+            talk_decision += 1
+        elif decision_result == "game over":
             game_over = True
 
     #gives the player a choice
@@ -345,14 +387,16 @@ def combat_cycle(enemy):
                 enemy_health -= player_pwr
                 if player_health <= 0:
                     print("You died, you loose!")
-                    return 'death'
+                    game_over('death')
                     break
                 if enemy_health <= 0:
                     match enemy:
                         case "goblin":
-                            print("After defeating the goblin, you find a sliver necklace on the corpse and add it to your equipment")
+                            #print("After defeating the goblin, you find a sliver necklace on the corpse and add it to your equipment")
+                            #dialog_selection(3, 11, COMBAT_DIALOG)
                             add_eqipment("sliver ring", accessories)
                             add_stats(accessories, "silver ring")
+                            dialog_selection(2, 12, COMBAT_DIALOG)
                             return 'combat'
                         case "bandit":
                             return 'combat'
@@ -390,6 +434,21 @@ def combat_cycle(enemy):
     #run
     pass
 
+def game_over(type):
+    player_score = player["stats"]['score']
+    match type:
+        case 'death':
+            print("You died")
+            print("Your final score was {}".format(player_score))
+        case 'combat':
+            print('CONGRATULATIONS, you were able to win by Combat')
+            print('There may be a different way to succeed, try again?')
+            print("Your final score was {}".format(player_score))
+        case 'sneak':
+            pass
+        case 'talk':
+            pass
+    pass
 
 if __name__ == "__main__":
     main()

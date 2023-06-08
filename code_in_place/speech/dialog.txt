@@ -7,8 +7,8 @@ As you have regained your senses you notice two paths in front of you
 The door to the left looks forboding and univiting like it has been tainted by something
 The door to the west is well kept and in prestine condition.
 Which do you choose?
-Left? Right?
----left door
+Left? Right? 
+---left door--- START path 0
 As you venture into the tainted door, 
 You notice as you touch the door to open it, 
 The handle starts to crumble to dust 
@@ -21,6 +21,38 @@ you notice a goblin on the path you are travelling not too far
 As you come closer the goblin has yet to notice you
 What do you do?
 -----------------------------------------------
+---right door--- START path 0
+As you open the door, you notice a chest.
+You have gained some armor which you put on to help protect you as you continue.
+After you doned your armor, you notice two more doors.
+To the left you see a 
+To the right you see a 
+Which do you choose?
+-----------------------------------------------
+---left door--- START path 1
+-----------------------------------------------
+---right door--- START path 1
 
-
----right door
+-----------------------------------------------
+---left door--- START path 2
+-----------------------------------------------
+---right door--- START path 2
+-----------------------------------------------
+---left door--- START path 3
+As you open the [] door, it opens to what looks like a warehouse packed with crates
+You notice an intentional path created between the boxes
+The further you go down, you come to an open area where you see a human rummaging through the boxes
+After watching this human for a moment, you conclude that he's not supposed to be there.
+You also notice an area where you can bypass this human where you may not be noticed
+What do you do?
+-----------------------------------------------
+---right door--- START path 3
+-----------------------------------------------
+---left door--- START path 4
+-----------------------------------------------
+---right door--- START path 4
+-----------------------------------------------
+---left door--- START path 4
+-----------------------------------------------
+---right door--- START path 4
+-----------------------------------------------

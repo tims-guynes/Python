@@ -11,9 +11,30 @@ Which do you choose to walk thorugh?
 Left? or Right?
 -----------------------------------------------
 -----BANDIT-----
-
+-----------------------------------------------
+As you make your final attack, you see the lifeless body of the bandit before you
+Weapon, Armor, and hands soaked with the blood as a sign of your victory
+You notice a gold ring on his finger.
+Taking it as your trophy from this victory.
+-----------------------------------------------
 ----- ORC  -----
-
+-----------------------------------------------
+After your fierce battle, you stand proud over the body of the fallen orc
+Seeing that the only thing of worth on this foe was the axe he used against you
+You take this and add it to your arsenal as you can sense its power
+-----------------------------------------------
 ----- ELF  -----
-
+-----------------------------------------------
+The arrogance of the fallen elf did not go unnoticed by you, gleeful not to hear his taunts anymore
+You notice around his neck is an oddly colored metal necklace
+Ripping it off you can feel that it is indeed powerful.
+Putting in on as a sign of your victory you feel the warmth of the necklace
+Knowing this will help you towards your goal of greatness.
+-----------------------------------------------
 -----DRAGON-----
+-----------------------------------------------
+Gazing upon the lifeless body of the dragon as you catch your breath
+With a sigh of releaf, you now you have succeeded in your quest for greatness
+For what other creature can match you as you have bested the greates being there is
+Once you have gained your composure, you start heading back to your home
+-----------------------------------------------

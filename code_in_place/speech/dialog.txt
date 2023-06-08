@@ -29,10 +29,9 @@ To the left you see a
 To the right you see a 
 Which do you choose?
 -----------------------------------------------
----left door--- START path 1
+---left door--- START path 1 - randome accessory
 -----------------------------------------------
----right door--- START path 1
-
+---right door--- START path 1 - orc encounter
 -----------------------------------------------
 ---left door--- START path 2
 -----------------------------------------------

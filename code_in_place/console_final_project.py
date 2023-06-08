@@ -5,11 +5,8 @@ import os
 
 MAIN_DIALOG = os.path.join(os.path.dirname(__file__),'speech/dialog.txt')
 COMBAT_DIALOG = os.path.join(os.path.dirname(__file__),'speech/combat.txt')
-BANDIT_SPEACH = os.path.join(os.path.dirname(__file__), "speech/bandit_speech.txt")
-GOBLIN_SPEACH = os.path.join(os.path.dirname(__file__), "speech/goblin_speech.txt")
-ORC_SPEACH = os.path.join(os.path.dirname(__file__), "speech/orc_speech.txt")
-ELF_SPEACH = os.path.join(os.path.dirname(__file__), "speech/elf_speech.txt")
-DRAGON_SPEACH = os.path.join(os.path.dirname(__file__), "speech/dragon_speech.txt")
+NPC_SPEACH = os.path.join(os.path.dirname(__file__), "speech/npc_speech.txt")
+
 
 TEXT_SPEED = 0.1
 
@@ -82,6 +79,12 @@ weapons = {
         },
 }
 
+magic_weapons = {
+    "magic axe":{
+        "speed":10,
+        "power":30,
+        },
+}
 armor = {
     "cloth": {
         "defense": 1,
@@ -100,6 +103,21 @@ armor = {
         "speed": -7,
     },
     
+}
+
+magic_armor = {
+    "magic cloth": {
+        "defense": 11,
+        "speed": 6,
+    },
+    "magic leather": {
+        "defense": 13,
+        "speed": 4,
+    },
+    "magic chainmail": {
+        "defense": 15,
+        "speed": 2,
+    },
 }
 
 accessories = {
@@ -131,6 +149,10 @@ accessories = {
         "defense": 10,
         "score": 5
     },
+    
+}
+
+magic_accessories = {
     "magic grieves": {
         "health": 30,
         "score": 15
@@ -142,6 +164,10 @@ accessories = {
     "magic necklace": {
         "health": 20,
         "score": 7
+    },
+    "magic ring": {
+        "power": 10,
+        "score": 10
     }
 }
 
@@ -237,18 +263,23 @@ def fate_select_enemy(enemy):
             match enemy:
                 case "bandit":
                     player_score += 5
+                    dialog_selection(7,11,NPC_SPEACH)
                     return "talk"                    
                 case "goblin":
                     player_score += 5
+                    dialog_selection(1,6,NPC_SPEACH)
                     return "talk"
                 case "orc":
                     player_score += 5
+                    dialog_selection(12,17,NPC_SPEACH)
                     return "talk"
                 case "elf":
                     player_score += 5
+                    dialog_selection(18,22,NPC_SPEACH)
                     return "talk"
                 case "dragon":
                     player_score += 5
+                    dialog_selection(23,27,NPC_SPEACH)
                     return "talk"
                 
         case "combat":
@@ -282,24 +313,31 @@ def fate_select():
             case "left":
                 match num_selection:
                     case 0: #the beginning
+                        #goblin encounter
                         dialog_selection(11, 22, MAIN_DIALOG)
                         decision_result = fate_select_enemy("goblin")
                         
-                    case 1: #blood on your hands
+                    case 1: 
                         #finds a random accessory
-                        #case goes to 2
-                        dialog_selection(11, 22, MAIN_DIALOG)
+                        accessory_selection = random.choice(list(accessories.keys()))
+                        add_eqipment(accessory_selection, accessories)
+                        add_stats(accessories, accessory_selection)
+                        dialog_selection(25, 30, MAIN_DIALOG)
                         break
                         
-                    case 2: #sparing the enemy
+                    case 2: 
                         #elf encounter
-                        #attack goes to
-                        #sneak goes to
-                        #talk goes to
+                        dialog_selection(11, 22, MAIN_DIALOG)
+                        decision_result = fate_select_enemy("elf")
                         print("sparing the enemy")
                         pass
                     case 3: #supply chain
-                        print("supply chain")
+                        #bandit encounter
+                        dialog_selection(11, 22, MAIN_DIALOG)
+                        decision_result = fate_select_enemy("bandit")
+                        pass
+                    case 4:
+                        #
                         pass
             case "right":
                 match num_selection:
@@ -311,6 +349,7 @@ def fate_select():
                         num_selection = 2
                     case 1:
                         #orc encounter
+                        decision_result = fate_select_enemy("orc")
                         #attack goes to 4
                         #sneak goes to
                         #talk goes to
@@ -321,6 +360,9 @@ def fate_select():
                     case 3:
                         dialog_selection(11, 22, MAIN_DIALOG)
                         pass
+                    case 4:
+                        #dragon encounter
+                        pass
             case TypeError:
                 print(error_msg)
                 print("Left? or Right?")
@@ -328,10 +370,7 @@ def fate_select():
         
         if decision_result == "combat":
             combat_decision += 1
-            if num_selection == 0:
-                num_selection = 1
-                
-                choice = input(": ").lower()
+            choice = input(": ").lower()
         elif decision_result == "sneak":
             sneak_decision += 1
         elif decision_result == "talk":
@@ -399,13 +438,23 @@ def combat_cycle(enemy):
                             dialog_selection(2, 12, COMBAT_DIALOG)
                             return 'combat'
                         case "bandit":
+                            add_eqipment("gold ring", accessories)
+                            add_stats(accessories, "gold ring")
+                            dialog_selection(13, 19, COMBAT_DIALOG)
                             return 'combat'
                         case "orc":
+                            add_eqipment("magic axe", magic_weapons)
+                            add_stats(accessories, "magic axe")
+                            dialog_selection(20, 25, COMBAT_DIALOG)
                             return 'combat'
                         case "elf":
+                            add_eqipment("magic necklace", accessories)
+                            add_stats(accessories, "magic necklace")
+                            dialog_selection(26, 33, COMBAT_DIALOG)
                             return 'combat'
                         case "dragon":
-                            pass
+                            dialog_selection(34, 40, COMBAT_DIALOG)
+                            return 'combat'
                 player_health -= enemy_pwr - temp_def - player_defense
                 print("Your enemy the {} has done {} damage to you.".format(enemy, (enemy_pwr - temp_def - player_defense)))
                 print("Your remaining health is: {}".format(player_health))

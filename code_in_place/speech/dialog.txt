@@ -22,6 +22,7 @@ As you come closer the goblin has yet to notice you
 What do you do?
 -----------------------------------------------
 ---right door--- START path 0
+-----------------------------------------------
 As you open the door, you notice a chest.
 You have gained some armor which you put on to help protect you as you continue.
 After you doned your armor, you notice two more doors.

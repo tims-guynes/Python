@@ -339,6 +339,12 @@ def fate_select():
                     case 4:
                         #
                         pass
+                    case 5:
+                        #
+                        pass
+                    case 6:
+                        #
+                        pass
             case "right":
                 match num_selection:
                     case 0:
@@ -347,12 +353,11 @@ def fate_select():
                         add_stats(armor, armor_selection)
                         print("Congragulations, you found {}, which gives you the following stats {}".format(armor_selection.upper(), armor[armor_selection]))
                         num_selection = 2
+                        dialog_selection(24, 32, MAIN_DIALOG)
+                        choice = input(": ").lower()
                     case 1:
                         #orc encounter
                         decision_result = fate_select_enemy("orc")
-                        #attack goes to 4
-                        #sneak goes to
-                        #talk goes to
                         dialog_selection(11, 22, MAIN_DIALOG)
                     case 2:
                         dialog_selection(11, 22, MAIN_DIALOG)
@@ -361,7 +366,13 @@ def fate_select():
                         dialog_selection(11, 22, MAIN_DIALOG)
                         pass
                     case 4:
-                        #dragon encounter
+                        #
+                        pass
+                    case 5:
+                        #
+                        pass
+                    case 6:
+                        #
                         pass
             case TypeError:
                 print(error_msg)
@@ -370,11 +381,23 @@ def fate_select():
         
         if decision_result == "combat":
             combat_decision += 1
+            if num_selection == 0:
+                num_selection = 1
+            elif num_selection == 1:
+                num_selection = 3
+            elif num_selection == 2:
+                num_selection = 5
+
             choice = input(": ").lower()
-        elif decision_result == "sneak":
+        elif decision_result == "sneak" or decision_result == 'talk':
             sneak_decision += 1
-        elif decision_result == "talk":
-            talk_decision += 1
+            if num_selection == 0:
+                num_selection = 2
+            elif num_selection == 1:
+                num_selection = 4
+            elif num_selection == 2:
+                num_selection = 5
+
         elif decision_result == "game over":
             game_over = True
 

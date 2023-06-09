@@ -323,6 +323,7 @@ def fate_select():
                         add_eqipment(accessory_selection, accessories)
                         add_stats(accessories, accessory_selection)
                         dialog_selection(25, 30, MAIN_DIALOG)
+                        num_selection = 4
                         break
                         
                     case 2: 
@@ -343,7 +344,7 @@ def fate_select():
                         #
                         pass
                     case 6:
-                        #
+                        # OGRE fight
                         pass
             case "right":
                 match num_selection:
@@ -360,19 +361,22 @@ def fate_select():
                         decision_result = fate_select_enemy("orc")
                         dialog_selection(11, 22, MAIN_DIALOG)
                     case 2:
+                        #find item
                         dialog_selection(11, 22, MAIN_DIALOG)
                         pass
                     case 3:
+                        #find item
                         dialog_selection(11, 22, MAIN_DIALOG)
                         pass
                     case 4:
-                        #
+                        #ending 1
                         pass
                     case 5:
-                        #
+                        #ending 2
                         pass
                     case 6:
-                        #
+                        #ending 3
+                        #dragon fight
                         pass
             case TypeError:
                 print(error_msg)
@@ -397,6 +401,7 @@ def fate_select():
                 num_selection = 4
             elif num_selection == 2:
                 num_selection = 5
+            choice = input(": ").lower()
 
         elif decision_result == "game over":
             game_over = True
@@ -520,6 +525,8 @@ def game_over(type):
             pass
         case 'talk':
             pass
+
+def end_game():
     pass
 
 if __name__ == "__main__":

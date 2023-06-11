@@ -23,11 +23,14 @@ What do you do?
 -----------------------------------------------
 ---right door--- START path 0
 -----------------------------------------------
-As you open the door, you notice a chest.
-You have gained some armor which you put on to help protect you as you continue.
-After you doned your armor, you notice two more doors.
-To the left you see a 
-To the right you see a 
+After the goblin gives you the item he wanders off
+In his place two more doors appear. 
+This time you see the door on the left is a Blue door, 
+Almost like watching a body of water
+As it ripples and shifts in color from light to dark.
+The Right door is green, similar to the other door, 
+This shifts in colors like leaves in the wind from
+Light green to dark green.
 Which do you choose?
 -----------------------------------------------
 ---path 1---
@@ -40,6 +43,14 @@ The right has an orange hue from the edges like there's a strong
 source of light behind it.
 Which do you choose?
 -----------------------------------------------
+As you go through the door, things seem more tranquil, almost like there's
+A magical pressence beckoning you. 
+Looking around you notice a chest.
+As you open it, you find that there are a pair of grieves. 
+Putting them on you notice not only do they fit perfectly
+They also have a warmth to them.
+A short while you hear rumbling and two new doors burst from the ground
+The left door 
 ---path 2---
 -----------------------------------------------
 -----------------------------------------------

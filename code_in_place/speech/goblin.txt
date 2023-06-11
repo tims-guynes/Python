@@ -17,14 +17,6 @@ yOu nO kIlL?
 mE lIkE yOu 
 mE gIvE yOu tHiS
 hElP yOu
------------------------------------------------
-After the goblin gives you the item he wanders off
-In his place two more doors appear. 
-This time you see the door on the left is a Blue door, 
-Almost like watching a body of water
-As it ripples and shifts in color from light to dark.
-The Right door is green, similar to the other door, 
-This shifts in colors like leaves in the wind from
-Light green to dark green.
-Which do you choose?
+-----
+After giving you the item, the goblin wanders off.
 -----------------------------------------------

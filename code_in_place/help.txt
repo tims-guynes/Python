@@ -1,0 +1,8 @@
+Welcome to the Help section
+At any time you can type out the following commands
+-----------------------------------------------
+help - displays this information
+player - allows you to see your current stats or equipment
+repeat - repeat the message of the current path
+exit - allows you to exit the game
+-----------------------------------------------

@@ -1,0 +1,17 @@
+--Entering Encounter--
+-----------------------------------------------
+Two more doors burst through the ground with such force that it startles you
+Looking to the left, the door seems to be red, almost like it's covered in
+Blood flowing fromt he top of the doors seam.
+On the right, the door seems to have an orange hue almost like a strong light
+Is just behind the door, flickering in and out erratically.
+Which do you choose?
+-----------------------------------------------
+--LEFT DOOR--Red door
+-----------------------------------------------
+
+-----------------------------------------------
+--RIGHT DOOR--Orange Door
+-----------------------------------------------
+
+-----------------------------------------------

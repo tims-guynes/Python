@@ -1,0 +1,21 @@
+--Entering Encounter--
+-----------------------------------------------
+Onward you go, feeling something dark and omnious.
+As you look around, you start to see the darkness dance and shift. 
+Moments after you noticed this, you see what looks to be tattered fabric
+Swirlling around a place in front of you then stop as now a White door 
+Stands in front of you to the left.
+Taken aback from this situation, you notice just to the right that there is
+A vague outline of something. As you focus your attention, you notice that 
+There is another door, this one black as the environment you're in and hardly
+Noticeable. As you keep looking, the door on the right becomes more obvious.
+Which do you choose to enter?
+-----------------------------------------------
+--LEFT DOOR--White Door 
+-----------------------------------------------
+
+-----------------------------------------------
+--RIGHT DOOR--Black Door 
+-----------------------------------------------
+
+-----------------------------------------------

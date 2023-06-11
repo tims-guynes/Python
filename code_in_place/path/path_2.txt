@@ -1,0 +1,17 @@
+--Entering Encounter--
+-----------------------------------------------
+Once you've come to your senses, you now notice two more doors
+The door on the left has a blue color, almost like looking into a pool of 
+Water that's just had a stone dropped into it. 
+On the right, you see a green door, shifting and dancing like leaves in the 
+Sprint as the sun just barely touches while swaying in the wind.
+Which do you choose to enter?
+-----------------------------------------------
+--LEFT DOOR--Blue Door
+-----------------------------------------------
+
+-----------------------------------------------
+--RIGHT DOOR--Green Door
+-----------------------------------------------
+
+-----------------------------------------------

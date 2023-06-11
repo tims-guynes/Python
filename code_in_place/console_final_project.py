@@ -2,10 +2,12 @@ import random
 import time
 import os
 
+DEBUG = True #change to false once in production
 
 MAIN_DIALOG = os.path.join(os.path.dirname(__file__),'speech/dialog.txt')
 COMBAT_DIALOG = os.path.join(os.path.dirname(__file__),'speech/combat.txt')
 GOBLIN_DIALOG = os.path.join(os.path.dirname(__file__), "speech/goblin.txt")
+ORC_DIALOG = os.path.join(os.path.dirname(__file__), "speech/orc.txt")
 
 
 TEXT_SPEED = 0.1
@@ -133,11 +135,11 @@ accessories = {
         "defense": 1,
         "score": 3
     },
-    "sliver ring": {
+    "silver ring": {
         "speed": 2,
         "score": 1
     },
-    "sliver necklace": {
+    "silver necklace": {
         "defense": 2,
         "score": 1
     },
@@ -209,34 +211,26 @@ def choose_weapon():
     print(weapon_selection)
 
     #cycle through weapons to match and add item to equipment dictionary
+    print("Your stats before gaining a weapon are {}".format(player["stats"]))
     selection = input(":").lower()
 
     match selection:
         case "knife":
-            add_eqipment("knife", weapons)
+            add_equipment_and_stats("knife", weapons)
         case "sword":
-            add_eqipment("sword", weapons)
+            add_equipment_and_stats("sword", weapons)
         case "axe":
-            add_eqipment("axe", weapons)
+            add_equipment_and_stats("axe", weapons)
         case "hammer":
-            add_eqipment("hammer", weapons)
+            add_equipment_and_stats("hammer", weapons)
         case TypeError:
             print(error_msg)
             choose_weapon()
 
     print("You've chosen {}, may it do you well on this quest. This weapon gives you the following stats {}".format(selection, weapons[selection]))
-    add_stats(weapons, selection)
-
-    #print(player)    
-    
+    print("Your current stats are {}".format(player["stats"]))
     return(selection)
 
-#adds item to players equipment
-def add_eqipment(choice, _dict):
-    temp_choice = choice
-    for key, val in dict.items(_dict):
-        if key == temp_choice:
-            player["equipment"][key] = val
 
 def fate_select_enemy(enemy):
     #player stats
@@ -271,11 +265,11 @@ def fate_select_enemy(enemy):
                     return "talk"                    
                 case "goblin":
                     player_score += 5
-                    dialog_selection(1,6,NPC_SPEACH)
+                    dialog_selection(15,20,GOBLIN_DIALOG)
                     return "talk"
                 case "orc":
                     player_score += 5
-                    dialog_selection(12,17,NPC_SPEACH)
+                    dialog_selection(9,15,ORC_DIALOG)
                     return "talk"
                 case "elf":
                     player_score += 5
@@ -306,6 +300,8 @@ def fate_select():
     sneak_decision = 0
     talk_decision = 0
     """
+
+    player_stats = player['stats']
     game_over = False
 
 
@@ -325,28 +321,62 @@ def fate_select():
                     dialog_selection(0, 13, GOBLIN_DIALOG)
                     decision_result = fate_select_enemy("goblin")
                     #print("This is before {}".format(num_selection))
+                    #dialog_selection(2, 12, COMBAT_DIALOG)
                     num_selection = path_tree(decision_result, num_selection)
+                    choice = ""
+                    choice = input(": ").lower()
                     #print("This is after the 'path tree' function {}".format(num_selection))
                     
                     pass
                 elif choice == 'right':
-                    pass
+                    accessory_selection = random.choice(list(accessories.keys()))
+                    add_equipment_and_stats(accessory_selection,accessories)
+                    decision_result = "sneak"
+                    dialog_selection(25, 32, MAIN_DIALOG)
+                    choice = ""
+                    choice = input("Left? or Right?: ").lower()
             case 1:
                 if choice == 'left':
+                    #combat
+                    print("This is a path test path 1")
+                    test = input("press 1 for combat, press 2 for talk, press 3 for sneak")
+                    if test == 1:
+                        decision_result = "combat"
+                    elif test == 2:
+                        decision_result = "talk"
+                    elif test == 3:
+                        decision_result = "sneak"
+                    choice = ""
                     pass
                 elif choice == 'right':
-                    pass
+                    #non-com
+                    decision_result = "sneak"
+                    choice = input("Left? or Right?: ").lower()
             case 2:
                 if choice == 'left': #orc battle
-                    dialog_selection(11, 22, MAIN_DIALOG)
-                    decision_result = fate_select_enemy("goblin")
+                    dialog_selection(1, 8, ORC_DIALOG)
+                    decision_result = fate_select_enemy("orc")
+                    num_selection = path_tree(decision_result, num_selection)
+                    print("This is after the 'path tree' function {}".format(num_selection))
                     pass
                 elif choice == 'right':
-                    pass
+                    decision_result = "sneak"
             case 3:
                 if choice == 'left':
+                    #combat
+                    print("This is a path test, path 3")
+                    test = input("press 1 for combat, press 2 for talk, press 3 for sneak")
+                    if test == 1:
+                        decision_result = "combat"
+                    elif test == 2:
+                        decision_result = "talk"
+                    elif test == 3:
+                        decision_result = "sneak"
+                    choice = ""
                     pass
                 elif choice == 'right':
+                    #non-com
+                    decision_result = "sneak"
                     pass
             case 4:
                 if choice == 'left':
@@ -383,114 +413,25 @@ def fate_select():
                     pass
                 elif choice == 'right':
                     pass
-        """match choice:
-            case "left":
-                match num_selection:
-                    case 0: #the beginning
-                        #goblin encounter
-                        dialog_selection(11, 22, MAIN_DIALOG)
-                        decision_result = fate_select_enemy("goblin")
-                        
-                    case 1: 
-                        #finds a random accessory
-                        accessory_selection = random.choice(list(accessories.keys()))
-                        add_eqipment(accessory_selection, accessories)
-                        add_stats(accessories, accessory_selection)
-                        dialog_selection(25, 30, MAIN_DIALOG)
-                        num_selection = 4
-                        break
-                        
-                    case 2: 
-                        #elf encounter
-                        dialog_selection(11, 22, MAIN_DIALOG)
-                        decision_result = fate_select_enemy("elf")
-                        print("sparing the enemy")
-                        pass
-                    case 3: #supply chain
-                        #bandit encounter
-                        dialog_selection(11, 22, MAIN_DIALOG)
-                        decision_result = fate_select_enemy("bandit")
-                        pass
-                    case 4:
-                        #
-                        pass
-                    case 5:
-                        #
-                        pass
-                    case 6:
-                        # OGRE fight
-                        pass
-            case "right":
-                match num_selection:
-                    case 0:
-                        armor_selection = random.choice(list(armor.keys())) #randomly select a piece of armor
-                        add_eqipment(armor_selection, armor)
-                        add_stats(armor, armor_selection)
-                        print("Congragulations, you found {}, which gives you the following stats {}".format(armor_selection.upper(), armor[armor_selection]))
-                        num_selection = 2
-                        dialog_selection(24, 32, MAIN_DIALOG)
-                        choice = input(": ").lower()
-                    case 1:
-                        #orc encounter
-                        decision_result = fate_select_enemy("orc")
-                        dialog_selection(11, 22, MAIN_DIALOG)
-                    case 2:
-                        #find item
-                        dialog_selection(11, 22, MAIN_DIALOG)
-                        pass
-                    case 3:
-                        #find item
-                        dialog_selection(11, 22, MAIN_DIALOG)
-                        pass
-                    case 4:
-                        #ending 1
-                        pass
-                    case 5:
-                        #ending 2
-                        pass
-                    case 6:
-                        #ending 3
-                        #dragon fight
-                        pass
-            case TypeError:
-                print(error_msg)
-                print("Left? or Right?")
-                fate_select()"""
-        """ 
-        if decision_result == "combat":
-            combat_decision += 1
-            if num_selection == 0:
-                num_selection = 1
-            elif num_selection == 1:
-                num_selection = 3
-            elif num_selection == 2:
-                num_selection = 5
-
-            choice = input(": ").lower()
-        elif decision_result == "sneak" or decision_result == 'talk':
-            sneak_decision += 1
-            if num_selection == 0:
-                num_selection = 2
-            elif num_selection == 1:
-                num_selection = 4
-            elif num_selection == 2:
-                num_selection = 5
-            choice = input(": ").lower()"""
-
+       
         if decision_result == "game over":
             game_over = True
 
     #gives the player a choice
 
-#adds the stats of the item on the player
-def add_stats(i_dict, equipped):
-    #add stats that match to player stats from equipment
-    #bring in equipment stats
-    for key, val in i_dict.items():
+#adds the item to the player and it's stats
+def add_equipment_and_stats(item, item_dict):
+    #adds the item to the equipment list
+    temp_choice = item
+    for key, val in dict.items(item_dict):
+        if key == temp_choice:
+            player["equipment"][key] = val
+    
+    #adds the stats from the item to the players stats
+    for key, val in item_dict.items():
         for x, y in val.items():
-            if key == equipped:
-                player["stats"][x] += y #add the stat to the corrisponding state the item has
-   
+            if key == item:
+                player["stats"][x] += y
 
 def combat_cycle(enemy):
     
@@ -533,25 +474,23 @@ def combat_cycle(enemy):
                 if enemy_health <= 0:
                     match enemy:
                         case "goblin":
-                            #print("After defeating the goblin, you find a sliver necklace on the corpse and add it to your equipment")
-                            #dialog_selection(3, 11, COMBAT_DIALOG)
-                            add_eqipment("sliver ring", accessories)
-                            add_stats(accessories, "silver ring")
+                            add_equipment_and_stats("silver ring", accessories)
+                            print("You found a silver ring on the goblin")
                             dialog_selection(2, 12, COMBAT_DIALOG)
                             return 'combat'
                         case "bandit":
-                            add_eqipment("gold ring", accessories)
-                            add_stats(accessories, "gold ring")
+                            add_equipment_and_stats("gold ring", accessories)
+                            print("You found a gold ring on the bandit")
                             dialog_selection(13, 19, COMBAT_DIALOG)
                             return 'combat'
                         case "orc":
-                            add_eqipment("magic axe", magic_weapons)
-                            add_stats(accessories, "magic axe")
+                            add_equipment_and_stats("magic axe", magic_weapons)
+                            print("You found a magic axe on the orc")
                             dialog_selection(20, 25, COMBAT_DIALOG)
                             return 'combat'
                         case "elf":
-                            add_eqipment("magic necklace", accessories)
-                            add_stats(accessories, "magic necklace")
+                            add_equipment_and_stats("magic necklace", accessories)
+                            print("You found a magic necklace on the elf")
                             dialog_selection(26, 33, COMBAT_DIALOG)
                             return 'combat'
                         case "dragon":

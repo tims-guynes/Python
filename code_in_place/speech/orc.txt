@@ -1,0 +1,15 @@
+--ORC path 2
+-----------------------------------------------
+As you walk through the red door you notice an Orc
+Sitting by a fire with what looks to be a pig roasting 
+On a camp fire, he hasn't noticed and seems more interested
+In his meal 
+What do you do?
+-----------------------------------------------
+--Talk--
+Come and sit by the fire, enjoy a meal with me 
+I have come a long way to find the dragon to slay it
+Though I have to question my quest
+You look like you are strong and worthy.
+Here, take my axe and necklace, I will not need them
+-----------------------------------------------

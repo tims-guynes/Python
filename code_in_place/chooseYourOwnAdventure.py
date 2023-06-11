@@ -157,11 +157,13 @@ accessories = {
     },
     "ruby ring": {
         "power": 2,
-        "score": 1
+        "speed": 4,
+        "score": 8
     },
     "ruby necklace": {
         "defense": 2,
-        "score": 3
+        "speed": 4,
+        "score": 13
     },
     "steel grieves": {
         "defense": 10,
@@ -199,7 +201,6 @@ def main():
     
     dialog_selection(1, 4, PATH_0)
     choose_weapon()
-    #dialog_selection(4, 10, MAIN_DIALOG)
     fate_select()
     
 
@@ -283,8 +284,9 @@ def fate_select_enemy(enemy):
                 case "goblin":
                     player_score += 5
                     dialog_selection(15,22,GOBLIN_DIALOG)
-                    print("You get something")
-                    dialog_selection(24,35,MAIN_DIALOG) #REVISION NEEDED
+                    add_equipment_and_stats("ruby ring",accessories)
+                    print("The goblin gives you a 'Ruby ring'")
+                    #dialog_selection(1,9,PATH_1) #REVISION NEEDED
                     return "talk"
                 case "orc":
                     player_score += 5
@@ -356,6 +358,7 @@ def fate_select():
                         choice = "" #resets choice
                         choice = input(selection_msg).lower()
                     case 1: #path 2
+                        dialog_selection(10, 15, PATH_1)
                         if decision_result == "combat":
                             enemy = "orc"
                             enemy_dialog = ORC_DIALOG
@@ -402,8 +405,8 @@ def fate_select():
                         choice = input(selection_msg).lower()
                     case 1:
                         #randomly select an accessory 
-                        accessory_selection = random.choice(list(accessories.keys()))
-                        add_equipment_and_stats(accessory_selection,accessories)
+                        accessory_selection = random.choice(list(magic_accessories.keys()))
+                        add_equipment_and_stats(accessory_selection,magic_accessories)
                         decision_result = "sneak" #as this is a non-com and no interaction, default to 'sneak'
                         num_selection = 1 #to allow progression to the next level
                         sneak_decision += 1

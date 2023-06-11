@@ -167,6 +167,11 @@ accessories = {
         "defense": 10,
         "score": 5
     },
+    "steel bracers": {
+        "defense":10,
+        "speed": -1,
+        "score": 5
+    }
     
 }
 
@@ -337,19 +342,20 @@ def fate_select():
                 match num_selection:
                     case 0:
                          #goblin encounter
-
                         dialog_selection(0, 13, GOBLIN_DIALOG) #call enemy decision
                         decision_result = fate_select_enemy("goblin") #save result in variable
                         num_selection = 1
+
                         if decision_result == "combat":
                             print("After your victory")
-                            dialog_selection(1, 8, PATH_1)
+                            combat_decision +=1
                         elif decision_result == "sneak":
                             print("After you sneak past")
-                            dialog_selection(1, 8, PATH_1)
+                            sneak_decision += 1
+                        dialog_selection(1, 8, PATH_1)
                         choice = "" #resets choice
                         choice = input(selection_msg).lower()
-                    case 1:
+                    case 1: #path 2
                         if decision_result == "combat":
                             enemy = "orc"
                             enemy_dialog = ORC_DIALOG
@@ -360,10 +366,21 @@ def fate_select():
                             enemy_dialog = BANDIT_DIALOG
                             start_d = 1
                             end_d = 8
-                    
+                        num_selection = 2
                         dialog_selection(start_d, end_d, enemy_dialog)
                         decision_result = fate_select_enemy(enemy)
-                        num_selection = 2
+
+                        #victory points awarded
+                        if decision_result == "combat":
+                            print("After your victory")
+                            combat_decision +=1
+                        elif decision_result == "sneak":
+                            print("After you sneak past")
+                            sneak_decision += 1
+                        dialog_selection(1, 8, PATH_1)
+                        choice = "" #resets choice
+                        choice = input(selection_msg).lower()
+                        
                     case 2:
                         pass
                     case 3:
@@ -377,11 +394,23 @@ def fate_select():
                         add_equipment_and_stats(accessory_selection,accessories)
                         decision_result = "sneak" #as this is a non-com and no interaction, default to 'sneak'
                         num_selection = 1 #to allow progression to the next level
-                        dialog_selection(25, 32, MAIN_DIALOG)
+                        sneak_decision += 1
+                        dialog_selection(26, 30, PATH_0)
+                        print("{} that you put on.".format(accessory_selection))
                         choice = ""
-                        choice = input("Left? or Right?: ").lower()
+                        dialog_selection(1, 8, PATH_1)
+                        choice = input(selection_msg).lower()
                     case 1:
-                        pass
+                        #randomly select an accessory 
+                        accessory_selection = random.choice(list(accessories.keys()))
+                        add_equipment_and_stats(accessory_selection,accessories)
+                        decision_result = "sneak" #as this is a non-com and no interaction, default to 'sneak'
+                        num_selection = 1 #to allow progression to the next level
+                        sneak_decision += 1
+                        dialog_selection(26, 31, PATH_0)
+                        choice = ""
+                        dialog_selection(1, 8, PATH_2)
+                        choice = input(selection_msg).lower()
                     case 2:
                         pass
                     case 3:
@@ -392,10 +421,17 @@ def fate_select():
             case "player":
                 player_input = input("Stats or Equipment? ")
                 if player_input == "stats":
-                    print("Your current stats are {}".format(player["stats"]))
+                    for key, value in player["stats"].items():
+                        print("{}: {}".format(key, value))
+                    #print("Your current stats are {}".format(player["stats"]))
                     choice = input(selection_msg).lower()
                 elif player_input == "equipment":
-                    print("Your current equipment is {}".format(player["equipment"]))
+                    print("You are equipmed with:")
+                    for key, value in player["equipment"].items():
+                        print(key.capitalize())
+                        for x, y in value.items():
+                            print("   {}: {}".format(x, y))
+                    #print("Your current equipment is {}".format(player["equipment"]))
                     choice = input(selection_msg).lower()
                 else:
                     print("That was not a valid selection")
@@ -552,7 +588,6 @@ def game_over(type):
             pass
         case 'talk':
             pass
-
 
 def end_game():
     pass

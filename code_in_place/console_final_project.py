@@ -5,11 +5,15 @@ import os
 
 MAIN_DIALOG = os.path.join(os.path.dirname(__file__),'speech/dialog.txt')
 COMBAT_DIALOG = os.path.join(os.path.dirname(__file__),'speech/combat.txt')
-NPC_SPEACH = os.path.join(os.path.dirname(__file__), "speech/npc_speech.txt")
+GOBLIN_DIALOG = os.path.join(os.path.dirname(__file__), "speech/goblin.txt")
 
 
 TEXT_SPEED = 0.1
 
+#ending decision
+combat_decision = 0
+sneak_decision = 0
+talk_decision = 0
 
 error_msg = "You did not choose the right selection! "
 
@@ -297,10 +301,11 @@ def fate_select():
     num_selection = 0
     armor_selection = ""
     decision_result = ""
+    """
     combat_decision = 0
     sneak_decision = 0
     talk_decision = 0
-
+    """
     game_over = False
 
 
@@ -308,8 +313,77 @@ def fate_select():
     choice = input(": ").lower()
 
     while game_over == False:
-           
-        match choice:
+
+        match num_selection:
+            case 0:
+                if choice == 'left':
+                    #goblin encounter
+                    #call enemy decision
+                    #save result in variable
+                    #pass variable through decision function and set num_selection to that number
+                    
+                    dialog_selection(0, 13, GOBLIN_DIALOG)
+                    decision_result = fate_select_enemy("goblin")
+                    #print("This is before {}".format(num_selection))
+                    num_selection = path_tree(decision_result, num_selection)
+                    #print("This is after the 'path tree' function {}".format(num_selection))
+                    
+                    pass
+                elif choice == 'right':
+                    pass
+            case 1:
+                if choice == 'left':
+                    pass
+                elif choice == 'right':
+                    pass
+            case 2:
+                if choice == 'left': #orc battle
+                    dialog_selection(11, 22, MAIN_DIALOG)
+                    decision_result = fate_select_enemy("goblin")
+                    pass
+                elif choice == 'right':
+                    pass
+            case 3:
+                if choice == 'left':
+                    pass
+                elif choice == 'right':
+                    pass
+            case 4:
+                if choice == 'left':
+                    pass
+                elif choice == 'right':
+                    pass
+            case 5:
+                if choice == 'left':
+                    pass
+                elif choice == 'right':
+                    pass
+            case 6:
+                if choice == 'left':
+                    pass
+                elif choice == 'right':
+                    pass
+            case 7:
+                if choice == 'left':
+                    pass
+                elif choice == 'right':
+                    pass
+            case 8:
+                if choice == 'left':
+                    pass
+                elif choice == 'right':
+                    pass
+            case 9:
+                if choice == 'left':
+                    pass
+                elif choice == 'right':
+                    pass
+            case 10:
+                if choice == 'left':
+                    pass
+                elif choice == 'right':
+                    pass
+        """match choice:
             case "left":
                 match num_selection:
                     case 0: #the beginning
@@ -381,8 +455,8 @@ def fate_select():
             case TypeError:
                 print(error_msg)
                 print("Left? or Right?")
-                fate_select()
-        
+                fate_select()"""
+        """ 
         if decision_result == "combat":
             combat_decision += 1
             if num_selection == 0:
@@ -401,9 +475,9 @@ def fate_select():
                 num_selection = 4
             elif num_selection == 2:
                 num_selection = 5
-            choice = input(": ").lower()
+            choice = input(": ").lower()"""
 
-        elif decision_result == "game over":
+        if decision_result == "game over":
             game_over = True
 
     #gives the player a choice
@@ -525,6 +599,42 @@ def game_over(type):
             pass
         case 'talk':
             pass
+
+def path_tree(decision, path):
+    match decision:
+        case "combat":
+            match path:
+                #sets the path based on which path and choice made
+                case 0:
+                    return 2 #path 2
+                case 1:
+                    return 4 #path 4
+                case 2:
+                    return 6 #path 6 
+                case 3:
+                    return 8 #path 8
+            
+        case "sneak":
+            match path:
+                case 0:
+                    return 1 #path 1
+                case 1:
+                    return 3 #path 3
+                case 2:
+                    return 5 #path 5
+                case 3:
+                    return 9 #path 9
+        case "talk":
+            match path:
+                case 0:
+                    return 4 #path 4
+                case 1:
+                    return 5 #path 5
+                case 2:
+                    return 7 #path 7
+                case 3:
+                    return 10 #path 10
+        
 
 def end_game():
     pass

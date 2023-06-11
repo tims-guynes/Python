@@ -8,6 +8,7 @@ MAIN_DIALOG = os.path.join(os.path.dirname(__file__),'speech/dialog.txt')
 COMBAT_DIALOG = os.path.join(os.path.dirname(__file__),'speech/combat.txt')
 GOBLIN_DIALOG = os.path.join(os.path.dirname(__file__), "speech/goblin.txt")
 ORC_DIALOG = os.path.join(os.path.dirname(__file__), "speech/orc.txt")
+BANDIT_DIALOG = os.path.join(os.path.dirname(__file__), "speech/bandit.txt")
 
 
 TEXT_SPEED = 0.1
@@ -266,6 +267,8 @@ def fate_select_enemy(enemy):
                 case "goblin":
                     player_score += 5
                     dialog_selection(15,20,GOBLIN_DIALOG)
+                    print("You get something")
+                    dialog_selection(19,30,GOBLIN_DIALOG)
                     return "talk"
                 case "orc":
                     player_score += 5
@@ -300,6 +303,10 @@ def fate_select():
     sneak_decision = 0
     talk_decision = 0
     """
+    enemy = ""
+    enemy_dialog = ""
+    start_d = 0
+    end_d = 0
 
     player_stats = player['stats']
     game_over = False
@@ -314,50 +321,54 @@ def fate_select():
             case 0:
                 if choice == 'left':
                     #goblin encounter
-                    #call enemy decision
-                    #save result in variable
-                    #pass variable through decision function and set num_selection to that number
-                    
-                    dialog_selection(0, 13, GOBLIN_DIALOG)
-                    decision_result = fate_select_enemy("goblin")
-                    #print("This is before {}".format(num_selection))
-                    #dialog_selection(2, 12, COMBAT_DIALOG)
-                    num_selection = path_tree(decision_result, num_selection)
+
+                    dialog_selection(0, 13, GOBLIN_DIALOG) #call enemy decision
+                    decision_result = fate_select_enemy("goblin") #save result in variable
+
+                    #num_selection = path_tree(decision_result, num_selection) #pass variable through decision function and set num_selection to that number
+                    num_selection = 1
                     choice = ""
                     choice = input(": ").lower()
                     #print("This is after the 'path tree' function {}".format(num_selection))
                     
                     pass
                 elif choice == 'right':
+                    #randomly select an accessory 
                     accessory_selection = random.choice(list(accessories.keys()))
                     add_equipment_and_stats(accessory_selection,accessories)
-                    decision_result = "sneak"
+                    decision_result = "sneak" #as this is a non-com and no interaction, default to 'sneak'
                     dialog_selection(25, 32, MAIN_DIALOG)
                     choice = ""
                     choice = input("Left? or Right?: ").lower()
             case 1:
                 if choice == 'left':
                     #combat
-                    print("This is a path test path 1")
-                    test = input("press 1 for combat, press 2 for talk, press 3 for sneak")
-                    if test == 1:
-                        decision_result = "combat"
-                    elif test == 2:
-                        decision_result = "talk"
-                    elif test == 3:
-                        decision_result = "sneak"
-                    choice = ""
-                    pass
+                    enemy = ""
+                    enemy_dialog = ""
+                    start_d = 0
+                    end_d = 0
+
+                    if decision_result == "combat":
+                        enemy = "orc"
+                        enemy_dialog = ORC_DIALOG
+                        start_d = 1
+                        end_d = 8
+                    else:
+                        enemy = "bandit"
+                        enemy_dialog = BANDIT_DIALOG
+                        start_d = 1
+                        end_d = 8
+                    
+                    dialog_selection(start_d, end_d, enemy_dialog)
+                    decision_result = fate_select_enemy(enemy)
+                    num_selection = 2
+                    
                 elif choice == 'right':
                     #non-com
                     decision_result = "sneak"
                     choice = input("Left? or Right?: ").lower()
             case 2:
-                if choice == 'left': #orc battle
-                    dialog_selection(1, 8, ORC_DIALOG)
-                    decision_result = fate_select_enemy("orc")
-                    num_selection = path_tree(decision_result, num_selection)
-                    print("This is after the 'path tree' function {}".format(num_selection))
+                if choice == 'left':
                     pass
                 elif choice == 'right':
                     decision_result = "sneak"
@@ -378,41 +389,7 @@ def fate_select():
                     #non-com
                     decision_result = "sneak"
                     pass
-            case 4:
-                if choice == 'left':
-                    pass
-                elif choice == 'right':
-                    pass
-            case 5:
-                if choice == 'left':
-                    pass
-                elif choice == 'right':
-                    pass
-            case 6:
-                if choice == 'left':
-                    pass
-                elif choice == 'right':
-                    pass
-            case 7:
-                if choice == 'left':
-                    pass
-                elif choice == 'right':
-                    pass
-            case 8:
-                if choice == 'left':
-                    pass
-                elif choice == 'right':
-                    pass
-            case 9:
-                if choice == 'left':
-                    pass
-                elif choice == 'right':
-                    pass
-            case 10:
-                if choice == 'left':
-                    pass
-                elif choice == 'right':
-                    pass
+            
        
         if decision_result == "game over":
             game_over = True
@@ -538,7 +515,7 @@ def game_over(type):
             pass
         case 'talk':
             pass
-
+"""
 def path_tree(decision, path):
     match decision:
         case "combat":
@@ -573,7 +550,7 @@ def path_tree(decision, path):
                     return 7 #path 7
                 case 3:
                     return 10 #path 10
-        
+"""        
 
 def end_game():
     pass

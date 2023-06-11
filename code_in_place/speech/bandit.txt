@@ -1,0 +1,13 @@
+--BANDIT
+-----------------------------------------------
+As you walk through the red door you notice a Bandit
+Rummaging through bags and crates
+Unaware of your pressence and focused on his task you go
+Unnoticed. 
+What do you do?
+-----------------------------------------------
+--Talk--
+OH, you startled me, you know you shouldn't be sneaking up
+On people. 
+Here, take this and leave me be.
+-----------------------------------------------

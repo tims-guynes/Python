@@ -30,29 +30,19 @@ To the left you see a
 To the right you see a 
 Which do you choose?
 -----------------------------------------------
----left door--- START path 1 - randome accessory
+---path 1---
 -----------------------------------------------
----right door--- START path 1 - orc encounter
+After your previous encounter, two more doors appear like some force
+Is watching and offering you a fast way to make these choices.
+Looking upon the doors you can see that the left is red, almost like
+It's soaked in Blood.
+The right has an orange hue from the edges like there's a strong 
+source of light behind it.
+Which do you choose?
 -----------------------------------------------
----left door--- START path 2
+---path 2---
 -----------------------------------------------
----right door--- START path 2
 -----------------------------------------------
----left door--- START path 3
-As you open the [] door, it opens to what looks like a warehouse packed with crates
-You notice an intentional path created between the boxes
-The further you go down, you come to an open area where you see a human rummaging through the boxes
-After watching this human for a moment, you conclude that he's not supposed to be there.
-You also notice an area where you can bypass this human where you may not be noticed
-What do you do?
+---path 3---
 -----------------------------------------------
----right door--- START path 3
------------------------------------------------
----left door--- START path 4
------------------------------------------------
----right door--- START path 4
------------------------------------------------
----left door--- START path 4
------------------------------------------------
----right door--- START path 4
 -----------------------------------------------

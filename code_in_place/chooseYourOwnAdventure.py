@@ -4,8 +4,7 @@ import os
 
 DEBUG = True #change to false once in production
 
-MAIN_DIALOG = os.path.join(os.path.dirname(__file__),'speech/dialog.txt')
-COMBAT_DIALOG = os.path.join(os.path.dirname(__file__),'speech/combat.txt')
+ENDING_DIALOG = os.path.join(os.path.dirname(__file__), "path/ending.txt")
 HELP_DIALOG = os.path.join(os.path.dirname(__file__),'help.txt')
 #NPC text
 GOBLIN_DIALOG = os.path.join(os.path.dirname(__file__), "speech/goblin.txt")
@@ -14,6 +13,7 @@ BANDIT_DIALOG = os.path.join(os.path.dirname(__file__), "speech/bandit.txt")
 ELF_DIALOG = os.path.join(os.path.dirname(__file__), "speech/elf.txt")
 OGRE_DIALOG = os.path.join(os.path.dirname(__file__), "speech/ogre.txt")
 DRAGON_DIALOG = os.path.join(os.path.dirname(__file__), "speech/dragon.txt")
+DEMON_DIALOG = os.path.join(os.path.dirname(__file__), "speech/demon.txt")
 #PATH DIALOG
 PATH_0 = os.path.join(os.path.dirname(__file__), "path/path_0.txt")
 PATH_1 = os.path.join(os.path.dirname(__file__), "path/path_1.txt")
@@ -32,6 +32,7 @@ error_msg = "You did not choose the right selection! "
 selection_msg = "Left? Right? Help? "
 
 #dictionary's
+#default, uncomment once in production
 player = {
     "stats": {
         "power":0,
@@ -44,62 +45,71 @@ player = {
         
     }
 }
-
 enemies = {
     "bandit":{
         "power":4,
         "health":10,
         "speed":6,
-        "point":2
+        "score":2
     },
     "goblin":{
         "power":2,
         "health":6,
         "speed":7,
-        "point":1
+        "score":1
     },
     "orc":{
         "power":10,
         "health":15,
         "speed":4,
-        "point":3
+        "score":3
     },
     "elf":{
         "power":4,
         "health":8,
         "speed":15,
-        "point":4
+        "score":4
     },
     "ogre":{
         "power":18,
         "health":25,
         "speed":3,
-        "point":10
+        "score":10
     },
     "dragon":{
         "power":30,
         "health":100,
         "speed":2,
-        "point":20
+        "score":20
     },
+    "demon":{
+        "power":30,
+        "health":100,
+        "speed":2,
+        "score":20
+    }
 }
 
 weapons = {
     "knife": {
         "speed":4,
         "power":1,
+        "score": 1
         },
     "sword":{
         "speed":3,
         "power":2,
+        "score": 1
         },
     "axe":{
         "speed":2,
         "power":3,
+        "score": 1
         },
     "hammer": {
         "speed":1,
         "power":4,
+        "score": 1
         },
 }
 magic_weapons = {
@@ -114,18 +124,22 @@ armor = {
     "cloth": {
         "defense": 1,
         "speed": 4,
+        "score": 1
     },
     "leather": {
         "defense": 3,
         "speed": 2,
+        "score": 1
     },
     "chainmail": {
         "defense": 5,
         "speed": -2,
+        "score": 1
     },
     "plate": {
         "defense": 15,
         "speed": -7,
+        "score": 1
     },
     
 }
@@ -214,7 +228,6 @@ def main():
     choose_weapon()
     choose_armor()
     fate_select()
-    
 
 def dialog_selection(start, end, file_sel):
     dialog = clean_dialog_text(file_sel)
@@ -337,14 +350,14 @@ def fate_select_enemy(enemy):
                     return "talk"
                 case "elf":
                     player_score += 5
-                    dialog_selection(18,22,ELF_DIALOG)
+                    dialog_selection(10,15,ELF_DIALOG)
                     add_equipment_and_stats("magic necklace",magic_accessories)
                     print("The elf gives you a 'Magic necklace'")
 
                     return "talk"
                 case "ogre":
                     player_score += 5
-                    dialog_selection(18,22,OGRE_DIALOG)
+                    dialog_selection(7,15,OGRE_DIALOG)
                     add_equipment_and_stats("magic nut",magic_accessories)
                     print("The ogre gives you a 'Magic nut'")
 
@@ -352,6 +365,10 @@ def fate_select_enemy(enemy):
                 case "dragon":
                     player_score += 5
                     dialog_selection(23,27,DRAGON_DIALOG)
+                    return "talk"
+                case "demon":
+                    player_score += 5
+                    dialog_selection(1,15,DEMON_DIALOG)
                     return "talk"
                 
         case "combat":
@@ -366,7 +383,7 @@ def fate_select_enemy(enemy):
 
 #options to select
 def fate_select():
-    num_selection = 0
+    num_selection = 0 
     armor_selection = ""
     decision_result = ""
     
@@ -379,7 +396,7 @@ def fate_select():
     start_d = 0
     end_d = 0
 
-    player_stats = player['stats']
+    player_score = player["stats"]['score']
     game_over = False
 
 
@@ -448,12 +465,10 @@ def fate_select():
                         dialog_selection(1, 9, PATH_3) #begining intro to path 3
                         choice = input(selection_msg).lower()
                     case 3: #white door
-                        #NEED TO BE ALTERED
-                        #dialog_selection(1, 9, PATH_2)
                         enemy = "dragon"
                         enemy_dialog = DRAGON_DIALOG
                         start_d = 1
-                        end_d = 8
+                        end_d = 12
 
                         num_selection = 2
                         dialog_selection(start_d, end_d, enemy_dialog)
@@ -466,16 +481,24 @@ def fate_select():
                         elif decision_result == "sneak":
                             print("After you sneak past")
                             sneak_decision += 1
-                        dialog_selection(1, 13, PATH_3)
 
                         #game over decision
                         final_decision_result = calculate_win_condition(combat_decision, sneak_decision, talk_decision)
                         if final_decision_result == combat_decision:
-                            game_over("combat")
+                            dialog_selection(1,9,ENDING_DIALOG)
+                            print("Your final score was {}".format(player_score))
+                            dialog_selection(37,39,ENDING_DIALOG) #final thought
+                            exit()
                         elif final_decision_result == talk_decision:
-                            game_over("talk")
+                            dialog_selection(10,23,ENDING_DIALOG)
+                            print("Your final score was {}".format(player_score))
+                            dialog_selection(37,39,ENDING_DIALOG) #final thought
+                            exit()
                         elif final_decision_result == sneak_decision:
-                            game_over("sneak")
+                            dialog_selection(24,36,ENDING_DIALOG)
+                            print("Your final score was {}".format(player_score))
+                            dialog_selection(37,39,ENDING_DIALOG) #final thought
+                            exit()
                 
             case "right":
                 match num_selection:
@@ -507,15 +530,15 @@ def fate_select():
                         #dialog_selection(1, 9, PATH_2)
                         if decision_result == "combat":
                             enemy = "elf"
-                            enemy_dialog = ORC_DIALOG
+                            enemy_dialog = ELF_DIALOG
                             start_d = 1
-                            end_d = 8
+                            end_d = 9
                         else:
                             enemy = "ogre"
-                            enemy_dialog = BANDIT_DIALOG
+                            enemy_dialog = OGRE_DIALOG
                             start_d = 1
                             end_d = 8
-                        num_selection = 2
+                        num_selection = 3
                         dialog_selection(start_d, end_d, enemy_dialog)
                         decision_result = fate_select_enemy(enemy)
 
@@ -529,14 +552,11 @@ def fate_select():
                         dialog_selection(1, 13, PATH_3)
                         choice = "" #resets choice
                         choice = input(selection_msg).lower()
-                        
-                    case 3: #black door
-                        #NEED TO BE ALTERED
-                      
+                    case 3: #black door     
                         enemy = "demon"
-                        enemy_dialog = BANDIT_DIALOG
+                        enemy_dialog = DEMON_DIALOG
                         start_d = 1
-                        end_d = 8
+                        end_d = 15
 
                         num_selection = 2
                         dialog_selection(start_d, end_d, enemy_dialog)
@@ -549,16 +569,25 @@ def fate_select():
                         elif decision_result == "sneak":
                             print("After you sneak past")
                             sneak_decision += 1
-                        dialog_selection(1, 13, PATH_3)
                         
                         #game over decision
                         final_decision_result = calculate_win_condition(combat_decision, sneak_decision, talk_decision)
                         if final_decision_result == combat_decision:
-                            game_over("combat")
+                            dialog_selection(1,9,ENDING_DIALOG)
+                            print("Your final score was {}".format(player_score))
+                            dialog_selection(37,39,ENDING_DIALOG) #final thought
+                            exit()
                         elif final_decision_result == talk_decision:
-                            game_over("talk")
+                            dialog_selection(10,23,ENDING_DIALOG)
+                            print("Your final score was {}".format(player_score))
+                            dialog_selection(37,39,ENDING_DIALOG) #final thought
+                            exit()
                         elif final_decision_result == sneak_decision:
-                            game_over("sneak")
+                            dialog_selection(24,36,ENDING_DIALOG)
+                            print("Your final score was {}".format(player_score))
+                            dialog_selection(37,39,ENDING_DIALOG) #final thought
+                            exit()
+
             case "help":
                 dialog_selection(0, 8, HELP_DIALOG)
                 choice = input(selection_msg).lower()
@@ -595,17 +624,21 @@ def fate_select():
                         dialog_selection(1, 13, PATH_3)
                         choice = input(selection_msg).lower()
             case "debug":
-                debug_msg = "Path? Progression? "
-                debug_input = input(debug_msg).lower()
-                if debug_input == "path":
-                    print("The current path number is {}".format(num_selection))
-                    choice = input(selection_msg).lower()
-                elif debug_input == "progression":
-                    print("Your combat score is {}".format(combat_decision))
-                    print("Your sneak score is {}".format(sneak_decision))
-                    print("Your talk score is {}".format(talk_decision))
-                else:
-                    print("you have exited debug mode")
+                if DEBUG == True:
+                    debug_msg = "Path? Progression? "
+                    debug_input = input(debug_msg).lower()
+                    if debug_input == "path":
+                        print("The current path number is {}".format(num_selection))
+                        choice = input(selection_msg).lower()
+                    elif debug_input == "progression":
+                        print("Your combat score is {}".format(combat_decision))
+                        print("Your sneak score is {}".format(sneak_decision))
+                        print("Your talk score is {}".format(talk_decision))
+                    else:
+                        print("you have exited debug mode")
+                        choice = input(selection_msg).lower()
+                else: 
+                    print("Please make a valid selection.")
                     choice = input(selection_msg).lower()
             case "exit":
                 confirm = input("leaving so soon? Are you sure? Yes or No? ").lower()
@@ -673,36 +706,34 @@ def combat_cycle(enemy):
                         case "goblin":
                             add_equipment_and_stats("silver ring", accessories)
                             print("You found a silver ring on the goblin")
-                            #dialog_selection(2, 12, COMBAT_DIALOG)
                             return 'combat'
                         case "bandit":
                             add_equipment_and_stats("gold ring", accessories)
                             print("You found a gold ring on the bandit")
-                            #dialog_selection(13, 19, COMBAT_DIALOG)
                             return 'combat'
                         case "orc":
                             add_equipment_and_stats("magic axe", magic_weapons)
                             print("You found a magic axe on the orc")
-                            #dialog_selection(20, 25, COMBAT_DIALOG)
                             return 'combat'
                         case "elf":
                             add_equipment_and_stats("magic necklace", accessories)
                             print("You found a magic necklace on the elf")
-                            #dialog_selection(26, 33, COMBAT_DIALOG)
+                            return 'combat'
+                        case "ogre":
+                            add_equipment_and_stats("magic nut", magic_accessories)
                             return 'combat'
                         case "dragon":
-                            #dialog_selection(34, 40, COMBAT_DIALOG)
                             return 'combat'
                 else:
                     #print(enemy_dmg)
                     if enemy_dmg <= 0:
                         #print("less than 0")
                         temp_def = 0
-                        player_health = (player_health - temp_def)
+                        player_health -= temp_def
                         print("Your enemy the {} has done {} damage to you.".format(enemy, temp_def))
                         #player_health -= enemy_dmg
                     elif enemy_dmg > 0:
-                        player_health = (player_health - enemy_dmg)
+                        player_health -= enemy_dmg
                         print("Your enemy the {} has done {} damage to you.".format(enemy, enemy_dmg))
                     #print(enemy_dmg)
 
@@ -710,7 +741,7 @@ def combat_cycle(enemy):
                     print(player_health)
                     if player_health <= 0:
                         print("You died, you loose!")
-                        game_over('death')
+                        exit()
                     else:
                         print("Your remaining health is: {}".format(player_health))
                         results = input(combat_msg).lower()
@@ -724,7 +755,6 @@ def combat_cycle(enemy):
                 print("Your health is now at {}".format(player_health))
                 #if the damage is less than 0, set value to 0, otherwise subtract value from the players health
                 if enemy_dmg <= 0:
-                        print(enemy_dmg)
                         temp_def = 0
                         player_health = (player_health - temp_def)
                         print("Your enemy the {} has done {} damage to you.".format(enemy, temp_def))
@@ -747,9 +777,14 @@ def combat_cycle(enemy):
                 else:
                     print("You have failed to run away and now {} has attacked".format(enemy))
                     if enemy_dmg <= 0:
-                        player_health
+                        #print("less than 0")
+                        temp_def = 0
+                        player_health -= temp_def
+                        print("Your enemy the {} has done {} damage to you.".format(enemy, temp_def))
+                        #player_health -= enemy_dmg
                     elif enemy_dmg > 0:
-                        player_health -= enemy_dmg 
+                        player_health -= enemy_dmg
+                        print("Your enemy the {} has done {} damage to you.".format(enemy, enemy_dmg))
                     #player_health -= enemy_pwr - temp_def - player_defense
                     print("Doing {} damage to you".format((enemy_pwr - temp_def - player_defense)))
                     print("You are now down to {} health.".format(player_health))
@@ -792,21 +827,21 @@ def health_restore(start_num, end_num):
 def game_over(type):
     player_score = player["stats"]['score']
     match type:
-        case 'death':
+        case "death":
             print("You died")
             print("Your final score was {}".format(player_score))
             exit()
-        case 'combat':
+        case "combat":
             print('CONGRATULATIONS, you were able to win by Combat')
             print('There may be a different way to succeed, try again?')
             print("Your final score was {}".format(player_score))
             exit()
-        case 'sneak':
+        case "sneak":
             print("CONGRAGULATIONS, you were able to avoid everything")
             print('There may be a different way to succeed, try again?')
             print("Your final score was {}".format(player_score))
             exit()
-        case 'talk':
+        case "talk":
             print("CONGRAGULATIONS, you were able to avoid everything")
             print('There may be a different way to succeed, try again?')
             print("Your final score was {}".format(player_score))

@@ -1,6 +1,6 @@
 --start--
 Welcome Traveler
-You have are fortunate to have stumbled upon two weapons to help you fight on your quest
+You have are fortunate to have stumbled upon two items to help you fight on your quest
 Please choose one to take
 -----------------------------------------------
 Now that you have your weapon and armor

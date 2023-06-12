@@ -1,0 +1,15 @@
+--ELF-- 
+-----------------------------------------------
+The sounds of music and nature fill the area.
+Looking around you notice that the structure looks almost like it was grown
+Fletching arrows you notice an elf minding their own while working.
+You can see that there seems to be hundreds of arrows 
+as the elf puts another onto the pile and continues fletching.
+What do you do?
+-----------------------------------------------
+--Talk--
+-----------------------------------------------
+Why are you bothering me
+Here, take this and leave me
+I am far too busy for the likes of you
+-----------------------------------------------

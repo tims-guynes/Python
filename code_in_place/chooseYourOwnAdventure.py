@@ -70,6 +70,12 @@ enemies = {
         "speed":15,
         "point":4
     },
+    "ogre":{
+        "power":18,
+        "health":25,
+        "speed":3,
+        "point":10
+    },
     "dragon":{
         "power":30,
         "health":100,
@@ -96,7 +102,6 @@ weapons = {
         "power":4,
         },
 }
-
 magic_weapons = {
     "magic axe":{
         "speed":10,
@@ -104,6 +109,7 @@ magic_weapons = {
         "score":25
         },
 }
+
 armor = {
     "cloth": {
         "defense": 1,
@@ -123,7 +129,6 @@ armor = {
     },
     
 }
-
 magic_armor = {
     "magic cloth": {
         "defense": 11,
@@ -178,7 +183,6 @@ accessories = {
     }
     
 }
-
 magic_accessories = {
     "magic grieves": {
         "health": 30,
@@ -208,6 +212,7 @@ def main():
     
     dialog_selection(1, 4, PATH_0)
     choose_weapon()
+    choose_armor()
     fate_select()
     
 
@@ -236,7 +241,7 @@ def choose_weapon():
     print(weapon_selection)
 
     #cycle through weapons to match and add item to equipment dictionary
-    print("Your stats before gaining a weapon are {}".format(player["stats"]))
+    #print("Your stats before gaining a weapon are {}".format(player["stats"]))
     selection = input(":").lower()
 
     match selection:
@@ -253,9 +258,34 @@ def choose_weapon():
             choose_weapon()
 
     print("You've chosen {}, may it do you well on this quest. This weapon gives you the following stats {}".format(selection, weapons[selection]))
-    print("Your current stats are {}".format(player["stats"]))
+    #print("Your current stats are {}".format(player["stats"]))
     return(selection)
 
+def choose_armor():
+    armor_selection = ""
+
+    for key in armor.keys():
+        armor_selection += key.capitalize() + ": "
+    print(armor_selection)
+
+    selection = input(":").lower()
+
+    match selection:
+        case "cloth":
+            add_equipment_and_stats("knife", weapons)
+        case "leather":
+            add_equipment_and_stats("sword", weapons)
+        case "chainmail":
+            add_equipment_and_stats("axe", weapons)
+        case "plate":
+            add_equipment_and_stats("hammer", weapons)
+        case TypeError:
+            print(error_msg)
+            choose_weapon()
+
+    print("You've chosen {}, may it do you well on this quest. This armor gives you the following stats {}".format(selection, armor[selection]))
+    #print("Your current stats are {}".format(player["stats"]))
+    return(selection)
 
 def fate_select_enemy(enemy):
     #player stats
@@ -372,6 +402,7 @@ def fate_select():
                             combat_decision +=1
                         elif decision_result == "talk":
                             talk_decision += 1
+                            
                         elif decision_result == "sneak":
                             print("After you sneak past")
                             sneak_decision += 1
@@ -379,7 +410,7 @@ def fate_select():
                         choice = "" #resets choice
                         choice = input(selection_msg).lower()
                     case 1: #path 2
-                        dialog_selection(10, 15, PATH_1)
+                        dialog_selection(10, 14, PATH_1)
                         if decision_result == "combat":
                             enemy = "orc"
                             enemy_dialog = ORC_DIALOG
@@ -412,7 +443,7 @@ def fate_select():
                         decision_result = "sneak" #as this is a non-com and no interaction, default to 'sneak'
                         num_selection = 3 #to allow progression to the next level
                         sneak_decision += 1
-                        dialog_selection(10, 16, PATH_2) #left door in path_2.txt
+                        dialog_selection(10, 15, PATH_2) #left door in path_2.txt
                         choice = ""
                         dialog_selection(1, 9, PATH_3) #begining intro to path 3
                         choice = input(selection_msg).lower()
@@ -436,8 +467,15 @@ def fate_select():
                             print("After you sneak past")
                             sneak_decision += 1
                         dialog_selection(1, 13, PATH_3)
-                        choice = "" #resets choice
-                        choice = input(selection_msg).lower()
+
+                        #game over decision
+                        final_decision_result = calculate_win_condition(combat_decision, sneak_decision, talk_decision)
+                        if final_decision_result == combat_decision:
+                            game_over("combat")
+                        elif final_decision_result == talk_decision:
+                            game_over("talk")
+                        elif final_decision_result == sneak_decision:
+                            game_over("sneak")
                 
             case "right":
                 match num_selection:
@@ -461,7 +499,7 @@ def fate_select():
                         decision_result = "sneak" #as this is a non-com and no interaction, default to 'sneak'
                         num_selection = 2 #to allow progression to the next level
                         sneak_decision += 1
-                        dialog_selection(16, 21, PATH_1)
+                        dialog_selection(16, 20, PATH_1)
                         choice = ""
                         dialog_selection(1, 9, PATH_2) #opening path message
                         choice = input(selection_msg).lower()
@@ -513,8 +551,14 @@ def fate_select():
                             sneak_decision += 1
                         dialog_selection(1, 13, PATH_3)
                         
+                        #game over decision
                         final_decision_result = calculate_win_condition(combat_decision, sneak_decision, talk_decision)
-                        game_over(final_decision_result)
+                        if final_decision_result == combat_decision:
+                            game_over("combat")
+                        elif final_decision_result == talk_decision:
+                            game_over("talk")
+                        elif final_decision_result == sneak_decision:
+                            game_over("sneak")
             case "help":
                 dialog_selection(0, 8, HELP_DIALOG)
                 choice = input(selection_msg).lower()
@@ -614,6 +658,8 @@ def combat_cycle(enemy):
     enemy_pwr = temp_enemy['power']
     enemy_health = temp_enemy['health']
 
+    enemy_dmg = (temp_def + player_defense) - enemy_pwr
+
     player_check = ""
 
 
@@ -627,29 +673,41 @@ def combat_cycle(enemy):
                         case "goblin":
                             add_equipment_and_stats("silver ring", accessories)
                             print("You found a silver ring on the goblin")
-                            dialog_selection(2, 12, COMBAT_DIALOG)
+                            #dialog_selection(2, 12, COMBAT_DIALOG)
                             return 'combat'
                         case "bandit":
                             add_equipment_and_stats("gold ring", accessories)
                             print("You found a gold ring on the bandit")
-                            dialog_selection(13, 19, COMBAT_DIALOG)
+                            #dialog_selection(13, 19, COMBAT_DIALOG)
                             return 'combat'
                         case "orc":
                             add_equipment_and_stats("magic axe", magic_weapons)
                             print("You found a magic axe on the orc")
-                            dialog_selection(20, 25, COMBAT_DIALOG)
+                            #dialog_selection(20, 25, COMBAT_DIALOG)
                             return 'combat'
                         case "elf":
                             add_equipment_and_stats("magic necklace", accessories)
                             print("You found a magic necklace on the elf")
-                            dialog_selection(26, 33, COMBAT_DIALOG)
+                            #dialog_selection(26, 33, COMBAT_DIALOG)
                             return 'combat'
                         case "dragon":
-                            dialog_selection(34, 40, COMBAT_DIALOG)
+                            #dialog_selection(34, 40, COMBAT_DIALOG)
                             return 'combat'
                 else:
-                    player_health -= enemy_pwr - temp_def - player_defense 
-                    print("Your enemy the {} has done {} damage to you.".format(enemy, (enemy_pwr - temp_def - player_defense)))
+                    #print(enemy_dmg)
+                    if enemy_dmg <= 0:
+                        #print("less than 0")
+                        temp_def = 0
+                        player_health = (player_health - temp_def)
+                        print("Your enemy the {} has done {} damage to you.".format(enemy, temp_def))
+                        #player_health -= enemy_dmg
+                    elif enemy_dmg > 0:
+                        player_health = (player_health - enemy_dmg)
+                        print("Your enemy the {} has done {} damage to you.".format(enemy, enemy_dmg))
+                    #print(enemy_dmg)
+
+                    
+                    print(player_health)
                     if player_health <= 0:
                         print("You died, you loose!")
                         game_over('death')
@@ -657,12 +715,24 @@ def combat_cycle(enemy):
                         print("Your remaining health is: {}".format(player_health))
                         results = input(combat_msg).lower()
             case "defend":
-                healed_for = health_restore(1, 4)
-                player_health += healed_for
-                print("You healed for {}".format(healed_for))
+                healed_for = health_restore(1, 4) #randomly heal
+                if player["stats"]["health"] == player_health: #heal up to maximum health
+                    print("You are already at maximum health, you cannot heal anymore.")
+                else:
+                    player_health += healed_for
+                    print("You healed for {}".format(healed_for))
                 print("Your health is now at {}".format(player_health))
-                player_health -= enemy_pwr - temp_def - player_defense
-                print("Your enemy the {} has done {} damage to you.".format(enemy, (enemy_pwr - temp_def - player_defense)))
+                #if the damage is less than 0, set value to 0, otherwise subtract value from the players health
+                if enemy_dmg <= 0:
+                        print(enemy_dmg)
+                        temp_def = 0
+                        player_health = (player_health - temp_def)
+                        print("Your enemy the {} has done {} damage to you.".format(enemy, temp_def))
+                elif enemy_dmg > 0:
+                    player_health = (player_health - enemy_dmg)
+                    print("Your enemy the {} has done {} damage to you.".format(enemy, enemy_dmg))
+
+                
                 if player_health <= 0:
                         print("You died, you loose!")
                         game_over('death')
@@ -676,7 +746,11 @@ def combat_cycle(enemy):
                     return "combat"
                 else:
                     print("You have failed to run away and now {} has attacked".format(enemy))
-                    player_health -= enemy_pwr - temp_def - player_defense
+                    if enemy_dmg <= 0:
+                        player_health
+                    elif enemy_dmg > 0:
+                        player_health -= enemy_dmg 
+                    #player_health -= enemy_pwr - temp_def - player_defense
                     print("Doing {} damage to you".format((enemy_pwr - temp_def - player_defense)))
                     print("You are now down to {} health.".format(player_health))
                     if player_health <= 0:
@@ -686,39 +760,30 @@ def combat_cycle(enemy):
                         results = input(combat_msg).lower()
             case "help":
                 dialog_selection(0, 5, HELP_DIALOG)
+                dialog_selection(6, 8, HELP_DIALOG)
                 results = input(selection_msg).lower()
             case "player":
-                print("Your current health is {}".format(player_health))
-                print("Your current health is {}".format(player_defense))
-                print("Your current health is {}".format(player_pwr))
-                results = input(selection_msg).lower()
-            case "exit":
-                confirm = input("Are you sure? Yes or No? ")
-                if confirm == "Yes":
-                    print("Thank you for playing, come back to play another soon.")
-                    exit()
-                else:
-                    print("Thank you for staying")
-                    results = input(combat_msg).lower()
+                player_info_msg = "What player info did you want? Health? Defense? Power? Enemy damage(enemy)?"
+                player_info = input(player_info_msg).lower()
+                #enemy_dmg = enemy_pwr - temp_def - player_defense
+                enemy_dmg =  (temp_def + player_defense) - enemy_pwr
+                match player_info:
+                    case "health":
+                        print("Your current health is {}".format(player_health))
+                    case "defense":
+                        print("Your current health is {}".format(player_defense))
+                    case "power":
+                        print("Your current health is {}".format(player_pwr))
+                    case "enemy":
+                        print("The amount of damage this enemy will produce is {}".format(enemy_dmg))
+                    case "exit":
+                        results = input(combat_msg).lower()
+                    case TypeError:
+                        print("Please select a valid response")
+                        player_info = input(player_info_msg).lower()
             case TypeError:
                 print("Please select a valid response")
-                results = input(selection_msg).lower()
-    #ATTACK
-    #initial interaction with enemy player attacks first
-    #check to see if enemies health is 0
-    #if enemies health is greater than 0, enemy attacks
-    #check if player health is less than or equal to 0
-    # If less than or equal to 0, GAME OVER
-    # if not, continue the fight and prompt
-    #
-    #DEFEND
-    #when selected, player will heal a random amount of health
-    #and gain % of defense based on base stats
-    #enemy attacks
-    #check player health, if greater than 0, continue fight
-    #RUN
-    #randomly generate a 0 or 1, if 1, run successful
-    #if 0, enemy attacks, continue fight
+                results = input(combat_msg).lower()
 
 def health_restore(start_num, end_num):
     restore = random.randint(start_num, end_num)

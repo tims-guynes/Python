@@ -9,7 +9,10 @@ Which do you choose to enter?
 -----------------------------------------------
 --LEFT DOOR--Blue Door
 -----------------------------------------------
-
+Reaching for the handle, you notice that the door turns to water and falls to the ground
+With the splash, you are blinded momentarily.
+After regaining your sight back, you see a check in front of you.
+Opening the chest you find
 -----------------------------------------------
 --RIGHT DOOR--Green Door
 -----------------------------------------------

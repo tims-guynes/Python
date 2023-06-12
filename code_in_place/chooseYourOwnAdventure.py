@@ -2,7 +2,7 @@ import random
 import time
 import os
 
-DEBUG = True #change to false once in production
+DEBUG = False #change to false once in production
 
 ENDING_DIALOG = os.path.join(os.path.dirname(__file__), "path/ending.txt")
 HELP_DIALOG = os.path.join(os.path.dirname(__file__),'help.txt')

@@ -614,12 +614,14 @@ def combat_cycle(enemy):
     enemy_pwr = temp_enemy['power']
     enemy_health = temp_enemy['health']
 
+    player_check = ""
+
 
     while True:
         match results:
             case "attack":                
                 #initial attack player hits
-                enemy_health -= player_pwr
+                enemy_health -= player_pwr #player always attacks first
                 if enemy_health <= 0:
                     match enemy:
                         case "goblin":
@@ -646,7 +648,7 @@ def combat_cycle(enemy):
                             dialog_selection(34, 40, COMBAT_DIALOG)
                             return 'combat'
                 else:
-                    player_health -= enemy_pwr - temp_def - player_defense
+                    player_health -= enemy_pwr - temp_def - player_defense 
                     print("Your enemy the {} has done {} damage to you.".format(enemy, (enemy_pwr - temp_def - player_defense)))
                     if player_health <= 0:
                         print("You died, you loose!")
@@ -661,7 +663,11 @@ def combat_cycle(enemy):
                 print("Your health is now at {}".format(player_health))
                 player_health -= enemy_pwr - temp_def - player_defense
                 print("Your enemy the {} has done {} damage to you.".format(enemy, (enemy_pwr - temp_def - player_defense)))
-                results = input(combat_msg).lower()
+                if player_health <= 0:
+                        print("You died, you loose!")
+                        game_over('death')
+                else:
+                    results = input(combat_msg).lower()
                
             case "run":
                 success = random.randint(1, 6)
@@ -673,11 +679,30 @@ def combat_cycle(enemy):
                     player_health -= enemy_pwr - temp_def - player_defense
                     print("Doing {} damage to you".format((enemy_pwr - temp_def - player_defense)))
                     print("You are now down to {} health.".format(player_health))
-                    results = input(combat_msg).lower()
+                    if player_health <= 0:
+                        print("You died, you loose!")
+                        game_over('death')
+                    else:
+                        results = input(combat_msg).lower()
             case "help":
-                pass
+                dialog_selection(0, 5, HELP_DIALOG)
+                results = input(selection_msg).lower()
             case "player":
-                pass
+                print("Your current health is {}".format(player_health))
+                print("Your current health is {}".format(player_defense))
+                print("Your current health is {}".format(player_pwr))
+                results = input(selection_msg).lower()
+            case "exit":
+                confirm = input("Are you sure? Yes or No? ")
+                if confirm == "Yes":
+                    print("Thank you for playing, come back to play another soon.")
+                    exit()
+                else:
+                    print("Thank you for staying")
+                    results = input(combat_msg).lower()
+            case TypeError:
+                print("Please select a valid response")
+                results = input(selection_msg).lower()
     #ATTACK
     #initial interaction with enemy player attacks first
     #check to see if enemies health is 0
@@ -694,84 +719,6 @@ def combat_cycle(enemy):
     #RUN
     #randomly generate a 0 or 1, if 1, run successful
     #if 0, enemy attacks, continue fight
-  
-"""    match results:
-        case 'attack':
-            temp_result = ""
-            while True:
-                if temp_result == 'run' or temp_enemy["health"] <= 0: #check if option 'run' or enemies health is 0
-                    break
-                if temp_result == 'defend': #add extra defense when you set to defend.
-                    temp_def = 1
-                    player_health += 3
-                if temp_result == 'attack':
-                    temp_def = 0
-
-                print("You have done {} damage to the {} you are fighting.".format(player_pwr, enemy))
-                enemy_health -= player_pwr
-                
-                if enemy_health <= 0:
-                    match enemy:
-                        case "goblin":
-                            add_equipment_and_stats("silver ring", accessories)
-                            print("You found a silver ring on the goblin")
-                            dialog_selection(2, 12, COMBAT_DIALOG)
-                            return 'combat'
-                        case "bandit":
-                            add_equipment_and_stats("gold ring", accessories)
-                            print("You found a gold ring on the bandit")
-                            dialog_selection(13, 19, COMBAT_DIALOG)
-                            return 'combat'
-                        case "orc":
-                            add_equipment_and_stats("magic axe", magic_weapons)
-                            print("You found a magic axe on the orc")
-                            dialog_selection(20, 25, COMBAT_DIALOG)
-                            return 'combat'
-                        case "elf":
-                            add_equipment_and_stats("magic necklace", accessories)
-                            print("You found a magic necklace on the elf")
-                            dialog_selection(26, 33, COMBAT_DIALOG)
-                            return 'combat'
-                        case "dragon":
-                            dialog_selection(34, 40, COMBAT_DIALOG)
-                            return 'combat'
-                player_health -= enemy_pwr - temp_def - player_defense
-                print("Your enemy the {} has done {} damage to you.".format(enemy, (enemy_pwr - temp_def - player_defense)))
-                if player_health <= 0:
-                    print("You died, you loose!")
-                    game_over('death')
-                    
-
-                print("Your remaining health is: {}".format(player_health))
-                temp_result = input(combat_msg).lower()
-
-            print(temp_enemy)
-            #player attacks enemy
-            #subtract player power from enemy health
-            #check if enemy health is 0, if greater than 0
-            #enemy attacks player
-            #subtract enemy power from defense, 
-            # #if power < 0, result is 0 minus players health
-            # #else subtract enemy power from player health
-            #check to see if player health is 0, if greater than 0, start combat cycle again
-
-            
-        case 'defend':
-            print("Your defense goes up by 1")
-            print("And you heal for 3")
-            print("Your enemy the {} has done {} damage to you.".format(enemy, (enemy_pwr - temp_def - player_defense)))
-            print("Your current health is {}".format(player_health))
-            results = input(combat_msg).lower()
-
-        case 'run':
-            print("You ran away")
-        case TypeError:
-            print("You have selected an invalid option, please try again!")
-            combat_cycle(enemy)
-    #attack
-    #defend
-    #run
-    pass"""
 
 def health_restore(start_num, end_num):
     restore = random.randint(start_num, end_num)
@@ -803,6 +750,7 @@ def game_over(type):
 def calculate_win_condition(combat, sneak, talk):
     win_condition = [combat, sneak, talk]
     return max(win_condition)
+
 
 if __name__ == "__main__":
     main()

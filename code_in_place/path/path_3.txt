@@ -13,9 +13,23 @@ Which do you choose to enter?
 -----------------------------------------------
 --LEFT DOOR--White Door Dragon encounter
 -----------------------------------------------
-
+Once you reach the door, you feel an ominous pressence just behind the door.
+You steel yourself as you are reminded you've made it this far, there's no turning back.
+As you open the door you can feel the warmth of the air
+Wafting with the sent of brimstone and death, you're not sure this is a good idea after all
+Turning around, the door you came through is no longer there.
+You hear echoing in what looks to be a cavern open with the center lit with what looks to be a dragon
+'Pesky mortal, I do not appreciate trespassers'
 -----------------------------------------------
 --RIGHT DOOR--Black Door Dragon slayed encounter
 -----------------------------------------------
-
+As you open the door, you notice that the smell is pungent and putrid, as though something has rotted
+Looking around, you notice the dead corpse of what once was a dragon in the middle of the cavern 
+Unsure of how things came to be, you think that if something could take this beast down
+It's best to not linger.
+As you wander, you find what looks to be a party engaged in battle
+Moments later you see a large blade rise and swipe this group cutting them down.
+Before you stands a creature with the torso of a man, red and sheen like leather
+Large horns adorn his head
+With legs that look like they are part of a goat.
 -----------------------------------------------

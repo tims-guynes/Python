@@ -101,6 +101,7 @@ magic_weapons = {
     "magic axe":{
         "speed":10,
         "power":30,
+        "score":25
         },
 }
 armor = {
@@ -135,6 +136,7 @@ magic_armor = {
     "magic chainmail": {
         "defense": 15,
         "speed": 2,
+        "score": 25
     },
 }
 
@@ -193,6 +195,11 @@ magic_accessories = {
     "magic ring": {
         "power": 10,
         "score": 10
+    },
+    "magic nut": {
+        "power": 30,
+        "defense": 30,
+        "speed": 30,
     }
 }
 
@@ -280,25 +287,37 @@ def fate_select_enemy(enemy):
                 case "bandit":
                     player_score += 5
                     dialog_selection(7,11,BANDIT_DIALOG)
+                    add_equipment_and_stats("magic ring",accessories)
+                    print("The bandit gives you a 'Magic ring'")
+
                     return "talk"                    
                 case "goblin":
                     player_score += 5
                     dialog_selection(15,22,GOBLIN_DIALOG)
                     add_equipment_and_stats("ruby ring",accessories)
                     print("The goblin gives you a 'Ruby ring'")
-                    #dialog_selection(1,9,PATH_1) #REVISION NEEDED
+
                     return "talk"
                 case "orc":
                     player_score += 5
                     dialog_selection(9,15,ORC_DIALOG)
+                    add_equipment_and_stats("magic axe",magic_weapons)
+                    print("The orc gives you a 'magic axe'")
+
                     return "talk"
                 case "elf":
                     player_score += 5
                     dialog_selection(18,22,ELF_DIALOG)
+                    add_equipment_and_stats("magic necklace",magic_accessories)
+                    print("The elf gives you a 'Magic necklace'")
+
                     return "talk"
                 case "ogre":
                     player_score += 5
                     dialog_selection(18,22,OGRE_DIALOG)
+                    add_equipment_and_stats("magic nut",magic_accessories)
+                    print("The ogre gives you a 'Magic nut'")
+
                     return "talk"
                 case "dragon":
                     player_score += 5
@@ -351,6 +370,8 @@ def fate_select():
                         if decision_result == "combat":
                             print("After your victory")
                             combat_decision +=1
+                        elif decision_result == "talk":
+                            talk_decision += 1
                         elif decision_result == "sneak":
                             print("After you sneak past")
                             sneak_decision += 1
@@ -380,14 +401,43 @@ def fate_select():
                         elif decision_result == "sneak":
                             print("After you sneak past")
                             sneak_decision += 1
-                        dialog_selection(1, 8, PATH_1)
+                        dialog_selection(1, 9, PATH_2)
                         choice = "" #resets choice
                         choice = input(selection_msg).lower()
-                        
-                    case 2:
-                        pass
-                    case 3:
-                        pass
+                    case 2: #blue door
+                        #NEEDS TO BE ALTERED
+                        #randomly select an accessory 
+                        accessory_selection = random.choice(list(magic_accessories.keys()))
+                        add_equipment_and_stats(accessory_selection,magic_accessories)
+                        decision_result = "sneak" #as this is a non-com and no interaction, default to 'sneak'
+                        num_selection = 3 #to allow progression to the next level
+                        sneak_decision += 1
+                        dialog_selection(10, 16, PATH_2) #left door in path_2.txt
+                        choice = ""
+                        dialog_selection(1, 9, PATH_3) #begining intro to path 3
+                        choice = input(selection_msg).lower()
+                    case 3: #white door
+                        #NEED TO BE ALTERED
+                        #dialog_selection(1, 9, PATH_2)
+                        enemy = "dragon"
+                        enemy_dialog = DRAGON_DIALOG
+                        start_d = 1
+                        end_d = 8
+
+                        num_selection = 2
+                        dialog_selection(start_d, end_d, enemy_dialog)
+                        decision_result = fate_select_enemy(enemy)
+
+                        #victory points awarded
+                        if decision_result == "combat":
+                            print("After your victory")
+                            combat_decision +=1
+                        elif decision_result == "sneak":
+                            print("After you sneak past")
+                            sneak_decision += 1
+                        dialog_selection(1, 13, PATH_3)
+                        choice = "" #resets choice
+                        choice = input(selection_msg).lower()
                 
             case "right":
                 match num_selection:
@@ -396,8 +446,9 @@ def fate_select():
                         accessory_selection = random.choice(list(accessories.keys()))
                         add_equipment_and_stats(accessory_selection,accessories)
                         decision_result = "sneak" #as this is a non-com and no interaction, default to 'sneak'
-                        num_selection = 1 #to allow progression to the next level
                         sneak_decision += 1
+                        num_selection = 1 #to allow progression to the next level
+                        
                         dialog_selection(26, 30, PATH_0)
                         print("{} that you put on.".format(accessory_selection))
                         choice = ""
@@ -408,16 +459,62 @@ def fate_select():
                         accessory_selection = random.choice(list(magic_accessories.keys()))
                         add_equipment_and_stats(accessory_selection,magic_accessories)
                         decision_result = "sneak" #as this is a non-com and no interaction, default to 'sneak'
-                        num_selection = 1 #to allow progression to the next level
+                        num_selection = 2 #to allow progression to the next level
                         sneak_decision += 1
-                        dialog_selection(26, 31, PATH_0)
+                        dialog_selection(16, 21, PATH_1)
                         choice = ""
-                        dialog_selection(1, 8, PATH_2)
+                        dialog_selection(1, 9, PATH_2) #opening path message
                         choice = input(selection_msg).lower()
-                    case 2:
-                        pass
-                    case 3:
-                        pass
+                    case 2: #green door
+                        #dialog_selection(1, 9, PATH_2)
+                        if decision_result == "combat":
+                            enemy = "elf"
+                            enemy_dialog = ORC_DIALOG
+                            start_d = 1
+                            end_d = 8
+                        else:
+                            enemy = "ogre"
+                            enemy_dialog = BANDIT_DIALOG
+                            start_d = 1
+                            end_d = 8
+                        num_selection = 2
+                        dialog_selection(start_d, end_d, enemy_dialog)
+                        decision_result = fate_select_enemy(enemy)
+
+                        #victory points awarded
+                        if decision_result == "combat":
+                            print("After your victory")
+                            combat_decision +=1
+                        elif decision_result == "sneak":
+                            print("After you sneak past")
+                            sneak_decision += 1
+                        dialog_selection(1, 13, PATH_3)
+                        choice = "" #resets choice
+                        choice = input(selection_msg).lower()
+                        
+                    case 3: #black door
+                        #NEED TO BE ALTERED
+                      
+                        enemy = "demon"
+                        enemy_dialog = BANDIT_DIALOG
+                        start_d = 1
+                        end_d = 8
+
+                        num_selection = 2
+                        dialog_selection(start_d, end_d, enemy_dialog)
+                        decision_result = fate_select_enemy(enemy)
+
+                        #victory points awarded
+                        if decision_result == "combat":
+                            print("After your victory")
+                            combat_decision +=1
+                        elif decision_result == "sneak":
+                            print("After you sneak past")
+                            sneak_decision += 1
+                        dialog_selection(1, 13, PATH_3)
+                        
+                        final_decision_result = calculate_win_condition(combat_decision, sneak_decision, talk_decision)
+                        game_over(final_decision_result)
             case "help":
                 dialog_selection(0, 8, HELP_DIALOG)
                 choice = input(selection_msg).lower()
@@ -453,7 +550,19 @@ def fate_select():
                     case 3:
                         dialog_selection(1, 13, PATH_3)
                         choice = input(selection_msg).lower()
-            
+            case "debug":
+                debug_msg = "Path? Progression? "
+                debug_input = input(debug_msg).lower()
+                if debug_input == "path":
+                    print("The current path number is {}".format(num_selection))
+                    choice = input(selection_msg).lower()
+                elif debug_input == "progression":
+                    print("Your combat score is {}".format(combat_decision))
+                    print("Your sneak score is {}".format(sneak_decision))
+                    print("Your talk score is {}".format(talk_decision))
+                else:
+                    print("you have exited debug mode")
+                    choice = input(selection_msg).lower()
             case "exit":
                 confirm = input("leaving so soon? Are you sure? Yes or No? ").lower()
                 match confirm:
@@ -505,8 +614,88 @@ def combat_cycle(enemy):
     enemy_pwr = temp_enemy['power']
     enemy_health = temp_enemy['health']
 
-    
-    match results:
+
+    while True:
+        match results:
+            case "attack":                
+                #initial attack player hits
+                enemy_health -= player_pwr
+                if enemy_health <= 0:
+                    match enemy:
+                        case "goblin":
+                            add_equipment_and_stats("silver ring", accessories)
+                            print("You found a silver ring on the goblin")
+                            dialog_selection(2, 12, COMBAT_DIALOG)
+                            return 'combat'
+                        case "bandit":
+                            add_equipment_and_stats("gold ring", accessories)
+                            print("You found a gold ring on the bandit")
+                            dialog_selection(13, 19, COMBAT_DIALOG)
+                            return 'combat'
+                        case "orc":
+                            add_equipment_and_stats("magic axe", magic_weapons)
+                            print("You found a magic axe on the orc")
+                            dialog_selection(20, 25, COMBAT_DIALOG)
+                            return 'combat'
+                        case "elf":
+                            add_equipment_and_stats("magic necklace", accessories)
+                            print("You found a magic necklace on the elf")
+                            dialog_selection(26, 33, COMBAT_DIALOG)
+                            return 'combat'
+                        case "dragon":
+                            dialog_selection(34, 40, COMBAT_DIALOG)
+                            return 'combat'
+                else:
+                    player_health -= enemy_pwr - temp_def - player_defense
+                    print("Your enemy the {} has done {} damage to you.".format(enemy, (enemy_pwr - temp_def - player_defense)))
+                    if player_health <= 0:
+                        print("You died, you loose!")
+                        game_over('death')
+                    else:
+                        print("Your remaining health is: {}".format(player_health))
+                        results = input(combat_msg).lower()
+            case "defend":
+                healed_for = health_restore(1, 4)
+                player_health += healed_for
+                print("You healed for {}".format(healed_for))
+                print("Your health is now at {}".format(player_health))
+                player_health -= enemy_pwr - temp_def - player_defense
+                print("Your enemy the {} has done {} damage to you.".format(enemy, (enemy_pwr - temp_def - player_defense)))
+                results = input(combat_msg).lower()
+               
+            case "run":
+                success = random.randint(1, 6)
+                if success > 2:
+                    print("You have successfully run away")
+                    return "combat"
+                else:
+                    print("You have failed to run away and now {} has attacked".format(enemy))
+                    player_health -= enemy_pwr - temp_def - player_defense
+                    print("Doing {} damage to you".format((enemy_pwr - temp_def - player_defense)))
+                    print("You are now down to {} health.".format(player_health))
+                    results = input(combat_msg).lower()
+            case "help":
+                pass
+            case "player":
+                pass
+    #ATTACK
+    #initial interaction with enemy player attacks first
+    #check to see if enemies health is 0
+    #if enemies health is greater than 0, enemy attacks
+    #check if player health is less than or equal to 0
+    # If less than or equal to 0, GAME OVER
+    # if not, continue the fight and prompt
+    #
+    #DEFEND
+    #when selected, player will heal a random amount of health
+    #and gain % of defense based on base stats
+    #enemy attacks
+    #check player health, if greater than 0, continue fight
+    #RUN
+    #randomly generate a 0 or 1, if 1, run successful
+    #if 0, enemy attacks, continue fight
+  
+"""    match results:
         case 'attack':
             temp_result = ""
             while True:
@@ -520,10 +709,7 @@ def combat_cycle(enemy):
 
                 print("You have done {} damage to the {} you are fighting.".format(player_pwr, enemy))
                 enemy_health -= player_pwr
-                if player_health <= 0:
-                    print("You died, you loose!")
-                    game_over('death')
-                    break
+                
                 if enemy_health <= 0:
                     match enemy:
                         case "goblin":
@@ -551,6 +737,11 @@ def combat_cycle(enemy):
                             return 'combat'
                 player_health -= enemy_pwr - temp_def - player_defense
                 print("Your enemy the {} has done {} damage to you.".format(enemy, (enemy_pwr - temp_def - player_defense)))
+                if player_health <= 0:
+                    print("You died, you loose!")
+                    game_over('death')
+                    
+
                 print("Your remaining health is: {}".format(player_health))
                 temp_result = input(combat_msg).lower()
 
@@ -564,9 +755,14 @@ def combat_cycle(enemy):
             # #else subtract enemy power from player health
             #check to see if player health is 0, if greater than 0, start combat cycle again
 
-            pass
+            
         case 'defend':
-            pass
+            print("Your defense goes up by 1")
+            print("And you heal for 3")
+            print("Your enemy the {} has done {} damage to you.".format(enemy, (enemy_pwr - temp_def - player_defense)))
+            print("Your current health is {}".format(player_health))
+            results = input(combat_msg).lower()
+
         case 'run':
             print("You ran away")
         case TypeError:
@@ -575,7 +771,11 @@ def combat_cycle(enemy):
     #attack
     #defend
     #run
-    pass
+    pass"""
+
+def health_restore(start_num, end_num):
+    restore = random.randint(start_num, end_num)
+    return restore
 
 def game_over(type):
     player_score = player["stats"]['score']
@@ -583,17 +783,26 @@ def game_over(type):
         case 'death':
             print("You died")
             print("Your final score was {}".format(player_score))
+            exit()
         case 'combat':
             print('CONGRATULATIONS, you were able to win by Combat')
             print('There may be a different way to succeed, try again?')
             print("Your final score was {}".format(player_score))
+            exit()
         case 'sneak':
-            pass
+            print("CONGRAGULATIONS, you were able to avoid everything")
+            print('There may be a different way to succeed, try again?')
+            print("Your final score was {}".format(player_score))
+            exit()
         case 'talk':
-            pass
+            print("CONGRAGULATIONS, you were able to avoid everything")
+            print('There may be a different way to succeed, try again?')
+            print("Your final score was {}".format(player_score))
+            exit()
 
-def end_game():
-    pass
+def calculate_win_condition(combat, sneak, talk):
+    win_condition = [combat, sneak, talk]
+    return max(win_condition)
 
 if __name__ == "__main__":
     main()

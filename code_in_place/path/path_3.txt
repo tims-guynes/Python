@@ -11,11 +11,11 @@ There is another door, this one black as the environment you're in and hardly
 Noticeable. As you keep looking, the door on the right becomes more obvious.
 Which do you choose to enter?
 -----------------------------------------------
---LEFT DOOR--White Door 
+--LEFT DOOR--White Door Dragon encounter
 -----------------------------------------------
 
 -----------------------------------------------
---RIGHT DOOR--Black Door 
+--RIGHT DOOR--Black Door Dragon slayed encounter
 -----------------------------------------------
 
 -----------------------------------------------

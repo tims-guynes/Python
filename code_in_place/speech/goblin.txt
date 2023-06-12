@@ -18,5 +18,5 @@ mE lIkE yOu
 mE gIvE yOu tHiS
 hElP yOu
 -----
-After giving you the item, the goblin wanders off.
+After the goblin gives you the item he wanders off
 -----------------------------------------------
